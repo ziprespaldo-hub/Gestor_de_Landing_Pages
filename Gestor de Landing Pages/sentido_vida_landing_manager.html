@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentido de Vida - Gestor de Landing Pages Semanales</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #16a34a;
+            --primary-hover: #15803d;
+            --secondary: #0ea5e9;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-light: #f0fdf4;
+            --bg-dark: #14532d;
+            --surface: #ffffff;
+            --border: #bbf7d0;
+            --text-primary: #052e16;
+            --text-secondary: #166534;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 10px 25px rgba(22, 101, 52, 0.15);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            height: 100%;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .clinic-info h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .clinic-info p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        select, input[type="text"], input[type="date"], input[type="url"], input[type="tel"], input[type="email"], textarea {
+            padding: 0.625rem 0.875rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        select:focus, input:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-bar {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-lg);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .weeks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .week-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .week-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .week-card.completed {
+            border-color: var(--success);
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .week-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .week-number {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: white;
+            background: var(--primary);
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-ready { background: #dbeafe; color: #1e40af; }
+        .status-published { background: #d1fae5; color: #065f46; }
+
+        .week-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .week-meta {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-bottom: 3px solid var(--border);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+            color: white;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .btn-close {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .landing-preview {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 2px solid var(--border);
+        }
+
+        .preview-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .preview-section h3 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            padding: 1.5rem 2rem;
+            border-top: 3px solid var(--border);
+            gap: 1rem;
+            background: var(--bg-light);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .weeks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="clinic-info">
+                <h1>💚 Sentido de Vida - Clínica de Rehabilitación</h1>
+                <p>Gestor de Landing Pages Semanales • 52 Semanas de Esperanza</p>
+            </div>
+            <div class="header-actions">
+                <select id="filterQuarter">
+                    <option value="">Todos los Trimestres</option>
+                    <option value="1">Q1 - Conociendo las Adicciones</option>
+                    <option value="2">Q2 - El Camino de la Recuperación</option>
+                    <option value="3">Q3 - Familia y Apoyo Social</option>
+                    <option value="4">Q4 - Mantener la Sobriedad</option>
+                </select>
+                <select id="filterStatus">
+                    <option value="">Todos los Estados</option>
+                    <option value="pending">Pendiente</option>
+                    <option value="ready">Lista</option>
+                    <option value="published">Publicada</option>
+                </select>
+                <button type="button" class="btn btn-primary" id="btnExport">📥 Exportar</button>
+                <button type="button" class="btn btn-primary" id="btnImport">📤 Importar</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="statTotal">52</div>
+                <div class="stat-label">Semanas Totales</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statPending">0</div>
+                <div class="stat-label">Pendientes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statReady">0</div>
+                <div class="stat-label">Listas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statPublished">0</div>
+                <div class="stat-label">Publicadas</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="statProgress">0%</div>
+                <div class="stat-label">Progreso Anual</div>
+            </div>
+        </div>
+
+        <div class="weeks-grid" id="weeksContainer"></div>
+    </main>
+
+    <div class="modal-overlay" id="weekModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><span id="modalWeekNumber">Semana 01</span> • <span id="modalWeekTitle">Título</span></h2>
+                <button type="button" class="btn-close" id="modalClose">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-section">
+                    <div class="form-section-title">📋 Información General</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Semana del Año (1-52)</label>
+                            <input type="number" id="weekNumber" min="1" max="52" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Publicación (Lunes)</label>
+                            <input type="date" id="weekDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <select id="weekStatus">
+                                <option value="pending">Pendiente</option>
+                                <option value="ready">Lista</option>
+                                <option value="published">Publicada</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Título de la Semana</label>
+                            <input type="text" id="weekTitle" placeholder="Ej: Conociendo el Alcoholismo">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="form-section-title">🎯 Contenido del Landing Page</div>
+                    
+                    <div class="form-group full-width">
+                        <label>Hero - Título Principal</label>
+                        <input type="text" id="heroTitle" placeholder="Título impactante">
+                    </div>
+                    
+                    <div class="form-group full-width">
+                        <label>Hero - Subtítulo</label>
+                        <textarea id="heroSubtitle" placeholder="Mensaje de esperanza..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Problema - ¿Qué enfrentamos?</label>
+                        <textarea id="problemText" placeholder="Describe el problema de adicción..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Solución - ¿Cómo ayudamos?</label>
+                        <textarea id="solutionText" placeholder="Nuestro enfoque y metodología..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Beneficios (uno por línea)</label>
+                        <textarea id="benefitsText" rows="5" placeholder="✓ Beneficio 1
+✓ Beneficio 2
+✓ Beneficio 3"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Testimonio</label>
+                        <textarea id="testimonial" placeholder="Historia de recuperación..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Llamada a la Acción (CTA)</label>
+                        <input type="text" id="ctaText" placeholder="Ej: Comienza tu recuperación hoy">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>URL de la Landing Publicada</label>
+                        <input type="url" id="landingUrl" placeholder="https://...">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Notas Internas</label>
+                        <textarea id="notes" placeholder="Notas para el equipo..."></textarea>
+                    </div>
+                </div>
+
+                <div class="landing-preview">
+                    <h3 style="text-align:center; color: var(--primary); margin-bottom: 1rem;">Vista Previa del Landing</h3>
+                    <div id="previewContent"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="btnCancel">Cancelar</button>
+                <button type="button" class="btn btn-success" id="btnSave">💾 Guardar</button>
+                <button type="button" class="btn btn-primary" id="btnGenerateHTML">🚀 Generar HTML</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        const CLINIC_DATA = {
+            name: "Sentido de Vida Clínica de Rehabilitación en Adicciones A.C.",
+            rfc: "SVC201015SM3",
+            address: "Camino a las Islas #11, Zapotlanejo, Jalisco, México",
+            phone: "33 3196 2135",
+            email: "terehernandez2000@gmail.com",
+            facebook: "https://www.facebook.com/ClinicaenadiccionesSentidoDeVidaGDL/",
+            instagram: "@rehabilitacion_sentido_de_vida",
+            tiktok: "@sentido.de.vida4",
+            instagram2: "@__clinicasentidodevida__",
+            hours: "Abierto 24/7"
+        };
+
+        const WEEK_TEMPLATES = [
+            // Q1 - CONOCIENDO LAS ADICCIONES (Semanas 1-13)
+            {
+                week: 1,
+                quarter: 1,
+                title: "El Primer Paso: Reconocer la Adicción",
+                heroTitle: "La Recuperación Comienza con una Decisión",
+                heroSubtitle: "Reconocer que tienes un problema con las adicciones es el primer paso hacia una vida nueva. No estás solo en este camino.",
+                problem: "La adicción es una enfermedad que afecta a millones de personas. El alcohol, drogas y otras sustancias controlan tu vida, afectan tus relaciones y destruyen tu salud física y mental. Muchas personas viven en negación, sin aceptar que necesitan ayuda profesional.",
+                solution: "En Sentido de Vida ofrecemos un programa integral de rehabilitación basado en atención personalizada, terapias grupales e individuales, y un ambiente seguro para tu recuperación. Nuestro equipo de profesionales te acompaña 24/7 en cada etapa del proceso.",
+                benefits: "✓ Atención profesional especializada\n✓ Ambiente seguro y libre de sustancias\n✓ Terapias individuales y grupales\n✓ Seguimiento personalizado\n✓ Apoyo familiar incluido\n✓ Disponibilidad 24/7",
+                testimonial: "Llegué a Sentido de Vida sin esperanzas, consumiendo por más de 10 años. Hoy llevo 8 meses sobrio y he recuperado a mi familia. Este lugar me salvó la vida. - Carlos, 34 años",
+                cta: "Da el Primer Paso Hoy - Llámanos"
+            },
+            {
+                week: 2,
+                quarter: 1,
+                title: "Alcoholismo: Una Enfermedad Tratable",
+                heroTitle: "El Alcohol No Tiene Que Controlar Tu Vida",
+                heroSubtitle: "Miles de personas han vencido el alcoholismo. Tú también puedes lograrlo con el apoyo adecuado.",
+                problem: "El alcoholismo destruye familias, carreras y vidas enteras. Lo que comenzó como una copa social se convierte en una necesidad diaria. Los intentos por dejar de beber por cuenta propia fracasan una y otra vez, generando frustración y desesperanza.",
+                solution: "Nuestro programa de tratamiento para alcoholismo incluye desintoxicación médica supervisada, terapia cognitivo-conductual, grupos de apoyo estilo 12 pasos, y un plan de prevención de recaídas personalizado. Tratamos la enfermedad desde todos sus aspectos: físico, mental y espiritual.",
+                benefits: "✓ Desintoxicación médica segura\n✓ Terapia especializada en alcoholismo\n✓ Grupos de apoyo diarios\n✓ Tratamiento de comorbilidades\n✓ Plan de prevención de recaídas\n✓ Reintegración social gradual",
+                testimonial: "El alcohol me quitó mi trabajo, mi familia y mi dignidad. En Sentido de Vida encontré la fuerza para recuperar mi vida. Llevo 6 meses sobrio y soy una persona diferente. - Miguel, 41 años",
+                cta: "Recupera Tu Vida - Contáctanos Ahora"
+            },
+            {
+                week: 3,
+                quarter: 1,
+                title: "Cocaína: Rompiendo las Cadenas",
+                heroTitle: "La Cocaína Controla Tu Mente, Nosotros Te Ayudamos a Liberarte",
+                heroSubtitle: "La adicción a la cocaína es devastadora, pero la recuperación es posible. Comienza tu nueva vida hoy.",
+                problem: "La cocaína genera una dependencia psicológica intensa. El craving constante, la ansiedad, la paranoia y los cambios de humor extremos hacen imposible llevar una vida normal. Las consecuencias incluyen problemas cardíacos, pérdida de relaciones y riesgo legal constante.",
+                solution: "Tratamos la adicción a cocaína con un enfoque integral que incluye estabilización médica, terapia intensiva para manejo de craving, técnicas de modificación conductual, y rehabilitación neuropsicológica. Nuestro programa dura mínimo 3 meses para garantizar resultados duraderos.",
+                benefits: "✓ Manejo especializado del craving\n✓ Rehabilitación neuropsicológica\n✓ Terapia de modificación conductual\n✓ Atención médica especializada\n✓ Grupos de apoyo específicos\n✓ Programa de 3-6 meses",
+                testimonial: "La coca me tenía esclavizado. Perdí todo: mi negocio, mi esposa, mi casa. Sentido de Vida me dio estructura, apoyo y las herramientas para vencer la adicción. Hoy soy libre. - Javier, 38 años",
+                cta: "Libérate de la Adicción - Llama Ya"
+            },
+            {
+                week: 4,
+                quarter: 1,
+                title: "Marihuana: Cuando el Consumo se Vuelve Problema",
+                heroTitle: "La Marihuana 'Inofensiva' Puede Robar Tu Motivación",
+                heroSubtitle: "El consumo crónico de marihuana afecta tu capacidad para disfrutar la vida sin sustancias. Hay una salida.",
+                problem: "Muchos minimizan la adicción a la marihuana, pero el consumo diario genera dependencia psicológica, síndrome amotivacional, problemas de memoria y concentración, ansiedad y depresión. Afecta tu desempeño laboral, escolar y tus relaciones personales.",
+                solution: "Nuestro programa para adicción a marihuana se enfoca en recuperar la motivación natural, manejar la ansiedad sin sustancias, y desarrollar habilidades de vida saludables. Incluye terapia ocupacional, actividades deportivas y técnicas de mindfulness.",
+                benefits: "✓ Recuperación de motivación natural\n✓ Manejo de ansiedad sin drogas\n✓ Terapia ocupacional\n✓ Actividades deportivas\n✓ Técnicas de mindfulness\n✓ Desarrollo de nuevos hábitos",
+                testimonial: "Fumaba todos los días desde los 16 años. Pensaba que no era grave, pero mi vida estaba estancada. Aquí aprendí a disfrutar la vida sin necesitar estar 'high'. - Luis, 28 años",
+                cta: "Recupera Tu Motivación - Inicia Hoy"
+            },
+            {
+                week: 5,
+                quarter: 1,
+                title: "Metanfetaminas: El Camino Más Duro",
+                heroTitle: "La Meta Destruye Todo a Su Paso, Pero Tú Puedes Sobrevivir",
+                heroSubtitle: "La recuperación de metanfetaminas es difícil pero posible. Miles lo han logrado, tú también puedes.",
+                problem: "Las metanfetaminas causan daños cerebrales severos, psicosis, deterioro físico extremo y una adicción casi incontrolable. El craving es intenso y las recaídas frecuentes. Sin tratamiento profesional intensivo, las consecuencias pueden ser fatales.",
+                solution: "Ofrecemos el programa más intensivo de la región para adicción a metanfetaminas. Incluye internación prolongada (6-12 meses), atención psiquiátrica especializada, rehabilitación cognitiva, terapia intensiva y seguimiento post-alta de largo plazo.",
+                benefits: "✓ Programa intensivo 6-12 meses\n✓ Atención psiquiátrica especializada\n✓ Rehabilitación cognitiva\n✓ Manejo de síntomas psicóticos\n✓ Monitoreo médico continuo\n✓ Seguimiento post-alta extendido",
+                testimonial: "La meta me llevó a perder todo. Mi familia me dio por muerto. Después de 9 meses en Sentido de Vida, estoy reconstruyendo mi vida paso a paso. Es el lugar que me dio una segunda oportunidad. - Roberto, 32 años",
+                cta: "Hay Esperanza - Contáctanos"
+            },
+            {
+                week: 6,
+                quarter: 1,
+                title: "Benzodiacepinas: La Adicción Silenciosa",
+                heroTitle: "Las 'Pastillas del Doctor' También Generan Adicción",
+                heroSubtitle: "Si dependes de clonazepam, alprazolam o diazepam para funcionar, necesitas ayuda profesional.",
+                problem: "Las benzodiacepinas (clonazepam, alprazolam, rivotril) generan dependencia física y psicológica. Lo que comenzó como un tratamiento médico se convierte en adicción. La abstinencia puede ser peligrosa sin supervisión médica, con riesgo de convulsiones.",
+                solution: "Realizamos desintoxicación gradual de benzodiacepinas bajo estricta supervisión médica, reduciendo dosis de forma segura. Combinamos tratamiento farmacológico alternativo, terapia para ansiedad, y técnicas de relajación natural.",
+                benefits: "✓ Desintoxicación médica segura\n✓ Reducción gradual supervisada\n✓ Prevención de convulsiones\n✓ Tratamiento de ansiedad subyacente\n✓ Técnicas de relajación natural\n✓ Alternativas farmacológicas seguras",
+                testimonial: "Tomaba clonazepam por 5 años. No podía dormir ni funcionar sin él. El equipo médico de Sentido de Vida me ayudó a dejar las pastillas de forma segura. Hoy duermo naturalmente. - Ana, 45 años",
+                cta: "Desintoxícate de Forma Segura - Llámanos"
+            },
+            {
+                week: 7,
+                quarter: 1,
+                title: "Policonsumo: Cuando Mezclas Todo",
+                heroTitle: "Mezclar Sustancias Multiplica el Peligro",
+                heroSubtitle: "El policonsumo es la forma más peligrosa de adicción. Requiere tratamiento especializado.",
+                problem: "Consumir múltiples sustancias (alcohol + coca, pastillas + alcohol, marihuana + otras drogas) multiplica los riesgos para tu salud. Las interacciones son impredecibles y potencialmente letales. El tratamiento es más complejo y requiere experiencia especializada.",
+                solution: "Nuestro equipo tiene amplia experiencia en policonsumo. Evaluamos cada sustancia individualmente, diseñamos un plan de desintoxicación escalonado y seguro, y trabajamos en las causas psicológicas que llevan a mezclar sustancias.",
+                benefits: "✓ Evaluación completa multi-sustancia\n✓ Desintoxicación escalonada segura\n✓ Manejo de interacciones complejas\n✓ Atención médica intensiva\n✓ Terapia psicológica profunda\n✓ Plan personalizado único",
+                testimonial: "Mezclaba alcohol, coca y pastillas. Mi cuerpo estaba destruido. Aquí me salvaron la vida, literalmente. El tratamiento fue intenso pero efectivo. Llevo 5 meses limpio. - Fernando, 29 años",
+                cta: "Tratamiento Especializado - Llama Ahora"
+            },
+            {
+                week: 8,
+                quarter: 1,
+                title: "Heroína y Opioides: La Batalla Más Dura",
+                heroTitle: "Los Opioides Tienen la Adicción Más Fuerte, Pero Se Puede Vencer",
+                heroSubtitle: "La heroína y los opioides destruyen vidas, pero con tratamiento médico especializado hay esperanza.",
+                problem: "La adicción a heroína y opioides genera dependencia física extrema. La abstinencia es agonizante y peligrosa. El riesgo de sobredosis es constante. Muchas personas recaen por el intenso dolor físico y psicológico del síndrome de abstinencia.",
+                solution: "Ofrecemos tratamiento médico especializado para opioides con terapias de sustitución cuando es necesario, manejo del dolor, desintoxicación supervisada 24/7, y apoyo psicológico intensivo. Nuestro programa es de largo plazo para prevenir recaídas.",
+                benefits: "✓ Tratamiento médico especializado\n✓ Manejo de abstinencia supervisado\n✓ Terapias de sustitución si necesario\n✓ Atención 24/7 durante crisis\n✓ Programa de largo plazo\n✓ Prevención de recaídas intensiva",
+                testimonial: "La heroína me tenía en las calles. Mi familia me abandonó. Sentido de Vida me dio refugio y tratamiento cuando nadie más lo hizo. Hoy tengo 7 meses limpio y estoy reconstruyendo mi vida. - David, 36 años",
+                cta: "Sal de las Calles - Hay Un Lugar Para Ti"
+            },
+            {
+                week: 9,
+                quarter: 1,
+                title: "Inhalables: La Adicción Olvidada",
+                heroTitle: "Los Inhalables Destruyen Tu Cerebro Rápidamente",
+                heroSubtitle: "Thinner, pegamento, gasolina... estas sustancias causan daño cerebral irreversible. Detente ahora.",
+                problem: "Los inhalables causan daño neurológico severo e irreversible en poco tiempo. Afectan memoria, coordinación, capacidad cognitiva y pueden causar muerte súbita por paro cardíaco. Es la adicción más común en jóvenes de la calle.",
+                solution: "Nuestro programa para adicción a inhalables incluye evaluación neurológica completa, rehabilitación cognitiva intensiva, atención médica especializada para daños orgánicos, y trabajo social para reintegración.",
+                benefits: "✓ Evaluación neurológica completa\n✓ Rehabilitación cognitiva\n✓ Atención médica especializada\n✓ Trabajo social intensivo\n✓ Apoyo nutricional\n✓ Programa de reintegración social",
+                testimonial: "Inhalaba thinner desde los 13 años. Llegué con daño neurológico severo. El equipo de Sentido de Vida trabajó incansablemente conmigo. Hoy, aunque tengo secuelas, vivo una vida digna. - Jorge, 22 años",
+                cta: "Detén el Daño Cerebral - Busca Ayuda Ya"
+            },
+            {
+                week: 10,
+                quarter: 1,
+                title: "Adicción a Anfetaminas y Estimulantes",
+                heroTitle: "Los Estimulantes Te Dan Energía Falsa y Destrucción Real",
+                heroSubtitle: "Anfetaminas, MDMA, éxtasis... la energía artificial tiene un precio muy alto.",
+                problem: "Los estimulantes generan euforia artificial, pero destruyen tu capacidad natural para sentir placer. Causan insomnio crónico, paranoia, problemas cardíacos y deterioro mental. El crash después del efecto es devastador.",
+                solution: "Tratamos la adicción a estimulantes con restauración del sueño natural, manejo de depresión post-consumo, rehabilitación de neurotransmisores naturales, y terapia para recuperar la capacidad de sentir placer sin sustancias.",
+                benefits: "✓ Restauración del sueño natural\n✓ Tratamiento de depresión post-consumo\n✓ Rehabilitación neurológica\n✓ Terapia de dopamina natural\n✓ Ejercicio y nutrición especializada\n✓ Manejo de ansiedad",
+                testimonial: "Las tachas y anfetas me mantuvieron despierto por años. Cuando dejé de usarlas, caí en depresión severa. Aquí me ayudaron a recuperar mi química cerebral natural. Hoy siento emociones reales. - Ricardo, 31 años",
+                cta: "Recupera Tu Química Natural - Contáctanos"
+            },
+            {
+                week: 11,
+                quarter: 1,
+                title: "Adicción al Tabaco: Nunca Es Tarde",
+                heroTitle: "El Tabaco También Es Adicción y Merece Tratamiento",
+                heroSubtitle: "Fumar no es solo un hábito, es una adicción que requiere apoyo profesional para vencer.",
+                problem: "La nicotina genera una de las adicciones más fuertes que existen. Fumar causa cáncer, enfermedades cardíacas y respiratorias. Muchos intentos por dejar el cigarro fracasan sin apoyo adecuado, generando frustración y desesperanza.",
+                solution: "Ofrecemos programa especializado para dejar de fumar que incluye terapia de reemplazo de nicotina, manejo de ansiedad, técnicas conductuales, y apoyo grupal. Tratamos el tabaquismo con la seriedad que merece.",
+                benefits: "✓ Terapia de reemplazo de nicotina\n✓ Manejo de ansiedad por abstinencia\n✓ Técnicas conductuales probadas\n✓ Apoyo grupal de ex-fumadores\n✓ Programa de 12 semanas\n✓ Seguimiento post-tratamiento",
+                testimonial: "Fumaba 2 cajetillas diarias por 25 años. Había intentado dejar mil veces. Con el programa de Sentido de Vida finalmente lo logré. Llevo 4 meses sin fumar y me siento renacido. - Arturo, 52 años",
+                cta: "Deja el Cigarro de Una Vez - Llámanos"
+            },
+            {
+                week: 12,
+                quarter: 1,
+                title: "Señales de Adicción en un Ser Querido",
+                heroTitle: "¿Cómo Saber Si Tu Familiar Tiene Adicción?",
+                heroSubtitle: "Reconocer las señales a tiempo puede salvar una vida. Aprende a identificar el problema.",
+                problem: "Muchas familias viven en negación o no saben identificar las señales de adicción. El comportamiento cambia, hay mentiras constantes, problemas económicos inexplicables, cambios de humor extremos, y aislamiento social. Mientras más tarde se detecte, más difícil es la recuperación.",
+                solution: "En Sentido de Vida ofrecemos orientación familiar gratuita para ayudarte a identificar adicciones, realizar intervenciones efectivas, y guiar a tu ser querido hacia el tratamiento. No estás solo en esto.",
+                benefits: "✓ Orientación familiar gratuita\n✓ Guía para detectar adicción\n✓ Asesoría en intervenciones\n✓ Apoyo para convencer al adicto\n✓ Información de tratamientos\n✓ Acompañamiento durante proceso",
+                testimonial: "Mi hijo consumía pero yo no lo quería ver. Cuando llamé a Sentido de Vida, me guiaron para hacer una intervención. Hoy mi hijo está en recuperación gracias a que actué a tiempo. - María, madre de paciente",
+                cta: "Orientación Familiar Gratuita - Llama"
+            },
+            {
+                week: 13,
+                quarter: 1,
+                title: "Mitos y Realidades de las Adicciones",
+                heroTitle: "Destruyendo los Mitos Que Impiden Buscar Ayuda",
+                heroSubtitle: "La desinformación mata. Conoce la verdad sobre las adicciones y el tratamiento.",
+                problem: "Existen muchos mitos que impiden a las personas buscar ayuda: 'solo es falta de voluntad', 'las drogas blandas no hacen daño', 'la rehabilitación no funciona', 'es un vicio, no una enfermedad'. Estas creencias falsas retrasan el tratamiento y cuestan vidas.",
+                solution: "Presentamos información científica actualizada sobre adicciones. La adicción ES una enfermedad cerebral tratable. La rehabilitación SÍ funciona con el programa adecuado. La voluntad sola NO es suficiente. El tratamiento profesional marca la diferencia.",
+                benefits: "✓ Información científica actualizada\n✓ Desmitificación de creencias falsas\n✓ Evidencia de efectividad\n✓ Testimonios reales de recuperación\n✓ Estadísticas de éxito\n✓ Transparencia total en métodos",
+                testimonial: "Creía que era débil, que solo necesitaba 'echarle ganas'. Cuando entendí que la adicción es una enfermedad que requiere tratamiento profesional, todo cambió. Aquí encontré la ayuda real que necesitaba. - Pablo, 40 años",
+                cta: "Conoce la Verdad - Infórmate Hoy"
+            },
+
+            // Q2 - EL CAMINO DE LA RECUPERACIÓN (Semanas 14-26)
+            {
+                week: 14,
+                quarter: 2,
+                title: "Qué Esperar en Tu Primer Día",
+                heroTitle: "El Primer Día Es El Más Difícil, Pero No Estás Solo",
+                heroSubtitle: "Te explicamos paso a paso qué sucede cuando ingresas a tratamiento en Sentido de Vida.",
+                problem: "El miedo a lo desconocido impide que muchas personas busquen ayuda. ¿Qué va a pasar? ¿Me van a encerrar? ¿Podré ver a mi familia? ¿Será como una cárcel? Estas dudas generan resistencia al tratamiento.",
+                solution: "En tu primer día realizamos evaluación médica y psicológica completa, te asignamos un terapeuta personal, te presentamos con tus compañeros de recuperación, explicamos las reglas claramente, y comenzamos tu plan personalizado. El ambiente es de apoyo, no de castigo.",
+                benefits: "✓ Evaluación completa el primer día\n✓ Terapeuta personal asignado\n✓ Habitación cómoda compartida\n✓ Conoces a tu grupo de apoyo\n✓ Plan personalizado claro\n✓ Comunicación con familia desde día 1",
+                testimonial: "Llegué muerto de miedo, pensando que sería como una prisión. Me sorprendió el ambiente cálido y de apoyo. Desde el primer día supe que estaba en el lugar correcto. - Eduardo, 35 años",
+                cta: "Conoce Nuestras Instalaciones - Visítanos"
+            },
+            {
+                week: 15,
+                quarter: 2,
+                title: "Desintoxicación: El Primer Obstáculo",
+                heroTitle: "La Desintoxicación Es Dura, Pero No Imposible",
+                heroSubtitle: "Con supervisión médica 24/7, superarás la fase más difícil de forma segura.",
+                problem: "La desintoxicación (el 'mono', la 'cruda larga') es tan dura que muchos recaen solo para aliviar el sufrimiento. Síntomas físicos y psicológicos intensos hacen que parezca imposible. Hacerlo solo es peligroso y casi siempre falla.",
+                solution: "Nuestro equipo médico maneja la desintoxicación con medicamentos que alivian síntomas, monitoreo constante de signos vitales, apoyo emocional 24/7, y ambiente seguro. No tienes que sufrir innecesariamente.",
+                benefits: "✓ Supervisión médica 24/7\n✓ Medicamentos para aliviar síntomas\n✓ Monitoreo de signos vitales\n✓ Apoyo emocional constante\n✓ Ambiente seguro y cómodo\n✓ Duración según sustancia (3-21 días)",
+                testimonial: "El síndrome de abstinencia me aterraba. Había intentado dejarlo solo y era un infierno. Aquí el equipo médico hizo que fuera tolerable. No fue fácil, pero fue soportable. - Marcos, 33 años",
+                cta: "Desintoxicación Segura - Comienza Ya"
+            },
+            {
+                week: 16,
+                quarter: 2,
+                title: "Terapia Individual: Tu Espacio Seguro",
+                heroTitle: "Un Terapeuta Personal Solo Para Ti",
+                heroSubtitle: "La terapia individual te permite trabajar tus problemas más profundos en un espacio confidencial.",
+                problem: "Detrás de cada adicción hay dolor emocional, traumas, problemas familiares, baja autoestima o salud mental no tratada. Sin resolver estos problemas de raíz, la recaída es casi inevitable.",
+                solution: "Cada paciente tiene sesiones de terapia individual con un psicólogo especializado. Trabajamos trauma, duelo, problemas familiares, autoestima, y cualquier tema que necesites abordar. Es tu espacio seguro para sanar.",
+                benefits: "✓ Terapeuta personal asignado\n✓ Sesiones individuales 2-3 veces/semana\n✓ Confidencialidad absoluta\n✓ Enfoque en tus necesidades únicas\n✓ Trabajo de traumas y dolor\n✓ Desarrollo de autoestima",
+                testimonial: "En las sesiones individuales pude hablar de cosas que nunca le había contado a nadie. Mi terapeuta me ayudó a entender por qué consumía. Esa comprensión fue clave para mi recuperación. - Sergio, 37 años",
+                cta: "Inicia Tu Terapia Personal - Llama"
+            },
+            {
+                week: 17,
+                quarter: 2,
+                title: "Terapia Grupal: No Estás Solo",
+                heroTitle: "Otros Que Te Entienden Porque Lo Han Vivido",
+                heroSubtitle: "En grupo encuentras apoyo, comprensión y motivación de personas que enfrentan lo mismo que tú.",
+                problem: "El aislamiento es parte de la adicción. Sientes que nadie te entiende, que estás solo en tu lucha. La vergüenza y el estigma te mantienen callado. Necesitas conectar con otros que sepan realmente lo que estás viviendo.",
+                solution: "Las terapias grupales diarias te conectan con otros en recuperación. Comparten experiencias, se apoyan mutuamente, aprenden unos de otros, y crean vínculos de amistad que duran para toda la vida.",
+                benefits: "✓ Sesiones grupales diarias\n✓ Grupos pequeños (8-12 personas)\n✓ Ambiente de confianza y respeto\n✓ Aprendes de experiencias de otros\n✓ Creas red de apoyo duradera\n✓ Reduces aislamiento y vergüenza",
+                testimonial: "Al principio no quería hablar en grupo, me daba pena. Pero escuchar historias similares a la mía me hizo sentir menos solo. Hoy mis compañeros de grupo son como hermanos. - Raúl, 29 años",
+                cta: "Únete a Nuestra Comunidad - Contáctanos"
+            },
+            {
+                week: 18,
+                quarter: 2,
+                title: "Los 12 Pasos: Un Camino Probado",
+                heroTitle: "Millones Se Han Recuperado Con Los 12 Pasos",
+                heroSubtitle: "El programa de 12 pasos ha ayudado a recuperarse a personas de todo el mundo durante décadas.",
+                problem: "Muchas personas intentan recuperarse solas, con pura voluntad, y fracasan repetidamente. Necesitas un programa estructurado, probado, que te guíe paso a paso y te conecte con una comunidad de apoyo.",
+                solution: "Implementamos el programa de 12 pasos como base de nuestro tratamiento. Trabajas cada paso con tu padrino, asistes a juntas diarias, y aprendes a vivir con los principios espirituales del programa.",
+                benefits: "✓ Programa probado internacionalmente\n✓ Estructura clara paso a paso\n✓ Asignación de padrino personal\n✓ Juntas diarias dentro de la clínica\n✓ Conexión con grupos externos\n✓ Comunidad de apoyo de por vida",
+                testimonial: "Los 12 pasos me dieron estructura cuando mi vida era caos total. Seguir el programa paso a paso me dio esperanza y dirección. Mi padrino fue clave en mi recuperación. - Héctor, 42 años",
+                cta: "Comienza Los 12 Pasos - Llama Hoy"
+            },
+            {
+                week: 19,
+                quarter: 2,
+                title: "Actividades Terapéuticas y Ocupacionales",
+                heroTitle: "Recuperarse No Es Solo Terapia, Es Vivir Diferente",
+                heroSubtitle: "Deportes, talleres, arte y música son parte integral de tu recuperación.",
+                problem: "Una vida sin sustancias puede parecer aburrida. ¿Qué voy a hacer con mi tiempo? ¿Cómo me voy a divertir? Necesitas descubrir actividades saludables que te den satisfacción y llenen tu tiempo libre.",
+                solution: "Ofrecemos deportes diarios (futbol, voleibol, caminatas), talleres de arte, música, carpintería, cocina, y otras actividades que te ayudan a descubrir nuevos intereses y habilidades.",
+                benefits: "✓ Actividades deportivas diarias\n✓ Talleres de arte y creatividad\n✓ Música y canto\n✓ Carpintería y manualidades\n✓ Cocina y repostería\n✓ Horario estructurado de actividades",
+                testimonial: "Descubrí que me encanta la carpintería. Nunca había hecho nada con mis manos. Ahora tengo un hobby saludable que me relaja y me hace sentir productivo. - Antonio, 31 años",
+                cta: "Descubre Nuevas Pasiones - Ingresa Hoy"
+            },
+            {
+                week: 20,
+                quarter: 2,
+                title: "Manejo de Emociones Sin Sustancias",
+                heroTitle: "Aprendiendo a Sentir Sin Anestesiarte",
+                heroSubtitle: "Las drogas fueron tu forma de no sentir. Ahora aprenderás a manejar tus emociones de forma saludable.",
+                problem: "Usabas sustancias para no sentir: dolor, tristeza, enojo, ansiedad, aburrimiento. Ahora que estás limpio, todas esas emociones regresan con fuerza. Sin herramientas para manejarlas, el riesgo de recaída es alto.",
+                solution: "Enseñamos técnicas de regulación emocional: mindfulness, respiración, identificación de emociones, expresión saludable de sentimientos, y manejo de crisis emocionales sin sustancias.",
+                benefits: "✓ Técnicas de mindfulness diarias\n✓ Ejercicios de respiración\n✓ Identificación de emociones\n✓ Expresión saludable de sentimientos\n✓ Manejo de crisis emocionales\n✓ Desarrollo de inteligencia emocional",
+                testimonial: "Nunca había llorado sobrio. Cuando las emociones regresaron me abrumaron. Aquí me enseñaron que sentir no es debilidad, y me dieron herramientas para manejar lo que siento. - Gabriel, 34 años",
+                cta: "Aprende a Manejar Tus Emociones - Llama"
+            },
+            {
+                week: 21,
+                quarter: 2,
+                title: "Reconstruyendo Tu Autoestima",
+                heroTitle: "Vales Mucho Más De Lo Que La Adicción Te Hizo Creer",
+                heroSubtitle: "La adicción destruyó tu autoestima. Es hora de reconstruirla desde cero.",
+                problem: "Años de adicción te convencieron de que no vales nada, que eres un fracaso, que no mereces cosas buenas. Esa autoestima destruida te mantiene atrapado en la adicción. Sin trabajar en esto, la recuperación es frágil.",
+                solution: "Trabajamos intensivamente en reconstruir tu autoestima: reconociendo tus cualidades, celebrando pequeños logros, desarrollando nuevas habilidades, y cambiando el diálogo interno negativo.",
+                benefits: "✓ Terapia enfocada en autoestima\n✓ Ejercicios de autovaloración\n✓ Celebración de logros pequeños\n✓ Desarrollo de nuevas habilidades\n✓ Cambio de diálogo interno\n✓ Reconocimiento de cualidades",
+                testimonial: "Llegué sintiéndome basura. La adicción me había convencido de que no servía para nada. Aquí me ayudaron a verme con otros ojos, a descubrir que sí tengo valor. - Alejandro, 39 años",
+                cta: "Recupera Tu Valor - Inicia Tu Proceso"
+            },
+            {
+                week: 22,
+                quarter: 2,
+                title: "Plan de Prevención de Recaídas",
+                heroTitle: "La Sobriedad Se Mantiene Con Un Plan Sólido",
+                heroSubtitle: "No basta con dejar de consumir. Necesitas un plan detallado para mantenerte limpio.",
+                problem: "Muchos salen de rehabilitación motivados pero sin un plan claro. ¿Qué hago en situaciones de riesgo? ¿Cómo manejo el craving? ¿Qué hago si me ofrecen drogas? Sin respuestas claras, la recaída es probable.",
+                solution: "Desarrollamos tu plan personalizado de prevención de recaídas: identificas tus triggers, aprendes señales de alarma, practicas respuestas a situaciones de riesgo, y creas tu red de apoyo post-alta.",
+                benefits: "✓ Plan personalizado de prevención\n✓ Identificación de tus triggers\n✓ Señales de alarma temprana\n✓ Práctica de situaciones de riesgo\n✓ Red de apoyo post-alta\n✓ Plan de acción ante craving",
+                testimonial: "Mi plan de prevención de recaídas me ha salvado varias veces. Cuando siento craving, sé exactamente qué hacer. Tener un plan me da seguridad. - Francisco, 36 años",
+                cta: "Crea Tu Plan de Éxito - Contáctanos"
+            },
+            {
+                week: 23,
+                quarter: 2,
+                title: "Espiritualidad en la Recuperación",
+                heroTitle: "No Necesitas Religión, Pero Sí Propósito",
+                heroSubtitle: "La conexión espiritual (no religiosa necesariamente) fortalece tu recuperación.",
+                problem: "La vida sin sustancias puede sentirse vacía. ¿Para qué estoy sobrio? ¿Cuál es mi propósito? Sin un sentido de significado más profundo, la motivación se debilita con el tiempo.",
+                solution: "Trabajamos el aspecto espiritual (respetando todas las creencias): conexión con algo más grande que tú, propósito de vida, valores personales, y búsqueda de significado. No es religioso si no quieres.",
+                benefits: "✓ Respeto a todas las creencias\n✓ Exploración de propósito de vida\n✓ Definición de valores personales\n✓ Conexión con algo trascendente\n✓ Búsqueda de significado\n✓ Fortalecimiento de fe personal",
+                testimonial: "No soy religioso, pero encontrar mi propósito de vida le dio sentido a mi sobriedad. Ahora sé por qué estoy limpio y hacia dónde voy. - Miguel Ángel, 41 años",
+                cta: "Encuentra Tu Propósito - Llama Ya"
+            },
+            {
+                week: 24,
+                quarter: 2,
+                title: "Nutrición y Salud Física",
+                heroTitle: "Tu Cuerpo Necesita Sanar También",
+                heroSubtitle: "La adicción destruyó tu salud. Una buena nutrición y ejercicio son parte de tu recuperación.",
+                problem: "Años de consumo destruyeron tu cuerpo: desnutrición, daño hepático, problemas dentales, sistema inmune debilitado. Sin atender la salud física, te sentirás mal y el riesgo de recaída aumenta.",
+                solution: "Ofrecemos alimentación balanceada tres veces al día, atención médica general, ejercicio diario, y educación nutricional. Tu cuerpo se recuperará junto con tu mente.",
+                benefits: "✓ 3 comidas balanceadas diarias\n✓ Atención médica general\n✓ Ejercicio diario estructurado\n✓ Educación nutricional\n✓ Suplementos si necesario\n✓ Monitoreo de salud constante",
+                testimonial: "Llegué pesando 55 kilos, desnutrido y enfermo. La comida aquí es casera y nutritiva. En 3 meses subí 15 kilos de puro músculo. Me veo y me siento como persona nueva. - Daniel, 28 años",
+                cta: "Recupera Tu Salud Física - Ingresa"
+            },
+            {
+                week: 25,
+                quarter: 2,
+                title: "Tiempo de Tratamiento: ¿Cuánto Necesito?",
+                heroTitle: "La Recuperación No Es Carrera, Es Maratón",
+                heroSubtitle: "El tiempo mínimo recomendado es 3 meses. Tu cerebro necesita tiempo para sanar.",
+                problem: "Muchos quieren salir rápido: 'ya estoy bien, ya puedo irme'. Pero la recuperación neurológica toma meses. Salir antes de tiempo casi siempre resulta en recaída.",
+                solution: "Recomendamos mínimo 90 días de internación. Los primeros 30 días es desintoxicación y estabilización. Los siguientes 60 días es cuando ocurre el verdadero cambio. Algunos necesitan 6 meses o más.",
+                benefits: "✓ Programa mínimo 90 días\n✓ Primeros 30 días: desintoxicación\n✓ Días 31-90: cambio profundo\n✓ Extensiones disponibles si necesario\n✓ Evaluación continua de progreso\n✓ Alta cuando estés realmente listo",
+                testimonial: "Quería salir al mes. Mi familia y el equipo me convencieron de quedarme 4 meses. Fue la mejor decisión. Los últimos 3 meses fueron cuando realmente cambié por dentro. - Rodrigo, 35 años",
+                cta: "Invierte El Tiempo Necesario - Llama"
+            },
+            {
+                week: 26,
+                quarter: 2,
+                title: "Preparándote Para El Alta",
+                heroTitle: "Salir de Tratamiento Es Solo El Comienzo",
+                heroSubtitle: "Te preparamos para la vida real afuera. El alta no es el final, es una nueva etapa.",
+                problem: "Muchos se sienten seguros dentro de la clínica pero aterrorizados de salir. ¿Y si recaigo? ¿Cómo enfrento a mi familia? ¿Podré con las tentaciones? Sin preparación adecuada, el miedo puede paralizarte.",
+                solution: "Preparamos tu alta con semanas de anticipación: permisos de salida supervisados, plan de vida detallado, conexión con grupos externos, y seguimiento post-alta garantizado.",
+                benefits: "✓ Preparación gradual para el alta\n✓ Permisos de salida supervisados\n✓ Plan de vida post-alta detallado\n✓ Conexión con grupos de apoyo externos\n✓ Seguimiento post-alta 6 meses\n✓ Apoyo telefónico disponible 24/7",
+                testimonial: "Tenía pánico de salir. Las salidas supervisadas me ayudaron a ganar confianza. Cuando me dieron el alta me sentía preparado. Y el seguimiento después me salvó de recaer dos veces. - Alberto, 37 años",
+                cta: "Preparación Para El Éxito - Contáctanos"
+            },
+
+            // Q3 - FAMILIA Y APOYO SOCIAL (Semanas 27-39)
+            {
+                week: 27,
+                quarter: 3,
+                title: "El Rol de la Familia en la Recuperación",
+                heroTitle: "La Familia Es Clave en Tu Proceso de Sanación",
+                heroSubtitle: "La adicción afectó a toda tu familia. La recuperación debe incluirlos a ellos también.",
+                problem: "La adicción destruyó la confianza familiar, causó dolor profundo, y creó patrones disfuncionales. Tu familia está herida, enojada, agotada. Sin sanar estas relaciones, tu recuperación será más difícil.",
+                solution: "Incluimos a la familia en el proceso: sesiones de terapia familiar, talleres psicoeducativos para familiares, comunicación abierta durante el internamiento, y herramientas para reconstruir confianza.",
+                benefits: "✓ Sesiones de terapia familiar incluidas\n✓ Talleres para familiares\n✓ Visitas familiares regulares\n✓ Comunicación telefónica permitida\n✓ Orientación para familiares\n✓ Reconstrucción de confianza",
+                testimonial: "Mi esposa estaba devastada. Las sesiones familiares aquí nos ayudaron a ambos a sanar. Ella entendió mi enfermedad y yo entendí su dolor. Hoy estamos más unidos que nunca. - Enrique, 43 años",
+                cta: "Sana a Tu Familia - Llama Ahora"
+            },
+            {
+                week: 28,
+                quarter: 3,
+                title: "Codependencia: Cuando Amar Hace Daño",
+                heroTitle: "¿Tu Familia Te 'Ayuda' o Te Habilita?",
+                heroSubtitle: "La codependencia mantiene la adicción activa. Es hora de romper ese ciclo.",
+                problem: "Muchas familias, con buena intención, habilitan la adicción: dan dinero, pagan deudas, mienten por el adicto, lo rescatan de consecuencias. Esta 'ayuda' solo prolonga la enfermedad.",
+                solution: "Educamos a las familias sobre codependencia, límites saludables, amor duro, y cómo apoyar sin habilitar. Ayudamos a la familia a cambiar sus patrones.",
+                benefits: "✓ Educación sobre codependencia\n✓ Establecimiento de límites sanos\n✓ Amor duro cuando es necesario\n✓ Apoyo sin habilitar\n✓ Grupos para familiares\n✓ Sanación familiar integral",
+                testimonial: "Mi mamá me daba dinero cada vez que le pedía. Sin saberlo, alimentaba mi adicción. En terapia familiar aprendió a poner límites. Fue lo mejor que pudo hacer por mí. - César, 30 años",
+                cta: "Rompe La Codependencia - Busca Ayuda"
+            },
+            {
+                week: 29,
+                quarter: 3,
+                title: "Reconstruyendo la Confianza Perdida",
+                heroTitle: "Recuperar la Confianza Toma Tiempo",
+                heroSubtitle: "Mentiste, robaste, decepcionaste. Ahora toca reconstruir lo que destruiste.",
+                problem: "Tu familia no te cree, y con razón. Has prometido cambiar mil veces y siempre recaíste. Han perdido toda la confianza. Esta desconfianza duele pero es consecuencia de tus actos.",
+                solution: "Te enseñamos que la confianza se recupera con acciones consistentes en el tiempo, no con promesas. Trabajamos honestidad, responsabilidad, y paciencia con el proceso de reconstrucción.",
+                benefits: "✓ Terapia sobre honestidad\n✓ Responsabilidad por tus actos\n✓ Enmiendas cuando sea posible\n✓ Paciencia con el proceso\n✓ Acciones consistentes\n✓ Comunicación familiar abierta",
+                testimonial: "Les había mentido tanto que ya nadie me creía nada. Entendí que tenía que demostrarlo con hechos, no palabras. Después de 8 meses limpio, poco a poco la confianza regresa. - Manuel, 38 años",
+                cta: "Recupera La Confianza - Comienza Hoy"
+            },
+            {
+                week: 30,
+                quarter: 3,
+                title: "Hijos de Padres Adictos",
+                heroTitle: "Tus Hijos Sufrieron Tu Adicción",
+                heroSubtitle: "Estuviste ausente física o emocionalmente. Es hora de reparar el daño.",
+                problem: "Tu adicción robó años de la infancia de tus hijos. Estuviste pero no estuviste. Te necesitaban y no estabas. Ese daño es profundo y requiere trabajo intencional para sanar.",
+                solution: "Ofrecemos terapia específica sobre paternidad en recuperación: cómo pedir perdón a tus hijos, reconstruir la relación padre-hijo, estar presente emocionalmente, y romper ciclos generacionales de adicción.",
+                benefits: "✓ Terapia sobre paternidad\n✓ Orientación para hablar con hijos\n✓ Reconstrucción de vínculo\n✓ Presencia emocional real\n✓ Romper ciclos generacionales\n✓ Ser el padre que merecen",
+                testimonial: "Perdí los primeros 5 años de vida de mi hija. Estaba físicamente pero ausente. Ahora estoy realmente presente. Cada día sobrio es un regalo para ella. - Jorge Luis, 33 años",
+                cta: "Sé El Padre Que Tus Hijos Merecen"
+            },
+            {
+                week: 31,
+                quarter: 3,
+                title: "Parejas en Recuperación",
+                heroTitle: "Tu Pareja También Necesita Sanar",
+                heroSubtitle: "La adicción casi destruyó tu relación. Juntos pueden reconstruir algo mejor.",
+                problem: "Tu pareja sufrió traiciones, mentiras, abandono emocional, y posiblemente abuso. La relación está dañada profundamente. Muchas parejas no sobreviven la adicción.",
+                solution: "La terapia de pareja es parte integral de tu tratamiento si así lo desean. Trabajamos comunicación, perdón, reconstrucción de intimidad, y creación de una relación más sana.",
+                benefits: "✓ Terapia de pareja disponible\n✓ Reconstrucción de comunicación\n✓ Trabajo de perdón mutuo\n✓ Intimidad emocional renovada\n✓ Relación más sana\n✓ Crecimiento como pareja",
+                testimonial: "Mi esposa estuvo a punto de dejarme. Las sesiones de pareja salvaron nuestro matrimonio. Hoy tenemos una relación que nunca tuvimos, ni antes de la adicción. - Ricardo, 42 años",
+                cta: "Salva Tu Relación - Busca Ayuda"
+            },
+            {
+                week: 32,
+                quarter: 3,
+                title: "Amistades Tóxicas: Aléjate de Ellas",
+                heroTitle: "Tus 'Amigos' de Consumo No Son Tus Amigos",
+                heroSubtitle: "Cambiar de vida significa cambiar de círculo social. Es doloroso pero necesario.",
+                problem: "Tus amigos de consumo no quieren que te recuperes. Te invitarán a consumir, se burlarán de tu sobriedad, o simplemente no entenderán tu nueva vida. Mantenerlos cerca es garantía de recaída.",
+                solution: "Te ayudamos a identificar relaciones tóxicas, establecer límites o cortar contacto, y construir un nuevo círculo social sano. También te conectamos con comunidades de recuperación.",
+                benefits: "✓ Identificación de relaciones tóxicas\n✓ Establecimiento de límites claros\n✓ Cortar contacto cuando necesario\n✓ Construcción de nuevas amistades\n✓ Conexión con comunidad de recuperación\n✓ Apoyo en el proceso de cambio",
+                testimonial: "Mis 'amigos' solo querían un compañero de fiesta. Cuando dejé de consumir, desaparecieron. Dolió, pero era necesario. Hoy tengo amigos reales que apoyan mi sobriedad. - Iván, 29 años",
+                cta: "Rodéate de Personas Positivas - Llama"
+            },
+            {
+                week: 33,
+                quarter: 3,
+                title: "Regresando al Trabajo o Escuela",
+                heroTitle: "Reincorporarte a La Vida Productiva",
+                heroSubtitle: "Perdiste trabajos o abandonaste estudios. Es hora de retomar tu vida productiva.",
+                problem: "La adicción destruyó tu vida laboral o académica. Perdiste empleos, abandonaste carreras, quemaste puentes profesionales. Te sientes inútil y sin futuro.",
+                solution: "Trabajamos habilidades laborales, construcción de CV, preparación para entrevistas, y plan de reincorporación laboral o académica. También ofrecemos vinculación con empleadores solidarios.",
+                benefits: "✓ Taller de habilidades laborales\n✓ Construcción de CV\n✓ Preparación para entrevistas\n✓ Plan de reincorporación\n✓ Vinculación con empleadores\n✓ Apoyo en búsqueda de empleo",
+                testimonial: "Había perdido 3 trabajos por la adicción. Nadie me quería contratar. El equipo de Sentido de Vida me ayudó a prepararme y me conectó con un empleador. Hoy tengo empleo estable. - Omar, 35 años",
+                cta: "Reconstruye Tu Vida Laboral - Inicia"
+            },
+            {
+                week: 34,
+                quarter: 3,
+                title: "Manejo de Estigma y Discriminación",
+                heroTitle: "El Estigma Es Real, Pero No Define Quién Eres",
+                heroSubtitle: "La sociedad juzga a los adictos en recuperación. Aprende a manejarlo sin vergüenza.",
+                problem: "La sociedad discrimina a personas en recuperación. Te juzgan, te rechazan laboralmente, te señalan socialmente. El estigma puede hacerte sentir menos que otros.",
+                solution: "Te empoderamos para manejar el estigma: no es tu identidad, es una enfermedad que tuviste. Trabajamos orgullo de tu recuperación, respuestas a discriminación, y auto-aceptación.",
+                benefits: "✓ Trabajo de auto-aceptación\n✓ Orgullo de tu recuperación\n✓ Manejo de discriminación\n✓ Respuestas a preguntas difíciles\n✓ No es tu identidad\n✓ Derechos de personas en recuperación",
+                testimonial: "Al principio me daba vergüenza decir que estuve en rehabilitación. Hoy lo digo con orgullo. Estar en recuperación es valiente, no vergonzoso. - Felipe, 31 años",
+                cta: "Recuperación Sin Vergüenza - Llama"
+            },
+            {
+                week: 35,
+                quarter: 3,
+                title: "Finanzas en la Recuperación",
+                heroTitle: "Tu Adicción Te Dejó en Quiebra",
+                heroSubtitle: "Deudas, pérdidas, mala administración. Es hora de reconstruir tu vida financiera.",
+                problem: "Gastaste todo en drogas. Tienes deudas enormes, cuentas bancarias cerradas, mal historial crediticio. La presión financiera puede ser trigger de recaída.",
+                solution: "Ofrecemos educación financiera básica, plan de pago de deudas, presupuesto de recuperación, y estrategias para reconstruir tu vida económica paso a paso.",
+                benefits: "✓ Educación financiera básica\n✓ Plan de pago de deudas\n✓ Presupuesto realista\n✓ Reconstrucción crediticia\n✓ Manejo de ansiedad financiera\n✓ Administración del dinero",
+                testimonial: "Debía medio millón de pesos. Me enseñaron a hacer un plan realista para pagar poco a poco. La presión financiera ya no me ahoga como antes. - Armando, 44 años",
+                cta: "Reconstruye Tu Vida Financiera - Inicia"
+            },
+            {
+                week: 36,
+                quarter: 3,
+                title: "Red de Apoyo Post-Alta",
+                heroTitle: "Necesitas Tribu, No Solo Tratamiento",
+                heroSubtitle: "Construye una red de apoyo sólida antes de salir. La necesitarás.",
+                problem: "Muchos salen de tratamiento y se sienten solos. No tienen a quién llamar en momentos difíciles. El aislamiento es factor de recaída.",
+                solution: "Te ayudamos a construir tu red de apoyo: grupos de 12 pasos, padrino, amigos de recuperación, terapia ambulatoria, y números de emergencia. Sales con un equipo completo.",
+                benefits: "✓ Conexión con grupos de apoyo\n✓ Asignación de padrino\n✓ Amigos de recuperación\n✓ Terapia ambulatoria post-alta\n✓ Línea de crisis 24/7\n✓ Comunidad de por vida",
+                testimonial: "Mi red de apoyo me ha salvado la vida varias veces. Cuando tengo ganas de consumir, sé a quién llamar. Nunca estoy solo en mi recuperación. - Gerardo, 36 años",
+                cta: "Construye Tu Red de Apoyo - Llama"
+            },
+            {
+                week: 37,
+                quarter: 3,
+                title: "Grupos de Apoyo: AA, NA y Más",
+                heroTitle: "Los Grupos de Apoyo Son Salvavidas",
+                heroSubtitle: "Alcohólicos Anónimos, Narcóticos Anónimos y otros grupos te sostienen de por vida.",
+                problem: "Salir de tratamiento sin conectarte a grupos de apoyo externos es como nadar sin salvavidas. Los momentos difíciles llegarán y necesitarás apoyo inmediato.",
+                solution: "Te conectamos con grupos de AA, NA, y otros antes de salir. Asistes a juntas dentro de la clínica y te llevamos a juntas externas para que conozcas tu grupo home.",
+                benefits: "✓ Juntas de AA/NA dentro de clínica\n✓ Salidas a juntas externas\n✓ Conoces tu grupo home\n✓ Asignación de padrino\n✓ Contactos de compañeros\n✓ Apoyo 24/7 disponible",
+                testimonial: "Voy a juntas de NA 5 veces por semana. Esa comunidad es mi familia. Me entienden sin tener que explicar. Sé que nunca estaré solo. - Martín, 33 años",
+                cta: "Únete a La Comunidad - Contáctanos"
+            },
+            {
+                week: 38,
+                quarter: 3,
+                title: "Ayudando a Otros en Recuperación",
+                heroTitle: "Servir a Otros Fortalece Tu Propia Sobriedad",
+                heroSubtitle: "Cuando ayudas a otro adicto, te ayudas a ti mismo. El servicio es medicina.",
+                problem: "Puedes sentirte egoísta enfocado solo en tu recuperación. Necesitas propósito, necesitas sentirte útil, necesitas dar lo que has recibido.",
+                solution: "Te enseñamos el valor del servicio: ser padrino de alguien más, llevar mensaje a otros que sufren, voluntariado en comunidad de recuperación. Ayudar a otros te mantiene fuerte.",
+                benefits: "✓ Oportunidades de servicio\n✓ Ser padrino cuando estés listo\n✓ Llevar mensaje a otros\n✓ Voluntariado en comunidad\n✓ Propósito en tu sobriedad\n✓ Fortalecimiento de tu programa",
+                testimonial: "Apadrinar a otros me mantiene conectado con mi programa. Ver cómo otros se recuperan me recuerda por qué estoy sobrio. Servir es parte esencial de mi recuperación. - Ramiro, 40 años",
+                cta: "Encuentra Propósito Sirviendo - Llama"
+            },
+            {
+                week: 39,
+                quarter: 3,
+                title: "Actividades Sociales Sobrias",
+                heroTitle: "Sí Puedes Divertirte Sin Sustancias",
+                heroSubtitle: "Aprender a socializar, divertirte y disfrutar la vida sin drogas ni alcohol.",
+                problem: "Tu vida social giraba alrededor del consumo. No sabes cómo divertirte sobrio. Fiestas, reuniones, eventos sociales dan ansiedad. ¿Cómo me divierto sin estar high?",
+                solution: "Te enseñamos a disfrutar actividades sobrias: deportes, cine, restaurantes, actividades al aire libre, hobbie, y eventos de comunidad de recuperación. La vida sobria puede ser divertida.",
+                benefits: "✓ Actividades recreativas sobrias\n✓ Eventos de comunidad\n✓ Deportes y aventuras\n✓ Cine, restaurantes, cafés\n✓ Hobbies nuevos\n✓ Amigos que no consumen",
+                testimonial: "Pensé que nunca me divertiría sobrio. Estaba equivocado. Ahora voy a conciertos, juego futbol, viajo. Me divierto más sobrio que cuando consumía. - Leonardo, 28 años",
+                cta: "Disfruta La Vida Sobria - Comienza Hoy"
+            },
+
+            // Q4 - MANTENER LA SOBRIEDAD (Semanas 40-52)
+            {
+                week: 40,
+                quarter: 4,
+                title: "Los Primeros 90 Días Después del Alta",
+                heroTitle: "Los Primeros 3 Meses Son Los Más Peligrosos",
+                heroSubtitle: "Estadísticamente, la mayoría de recaídas ocurren en los primeros 90 días. Prepárate.",
+                problem: "Sales de tratamiento motivado pero vulnerable. El mundo real tiene tentaciones por todas partes. Los primeros meses son críticos - sin vigilancia, la recaída es probable.",
+                solution: "Nuestro seguimiento post-alta de 90 días incluye llamadas semanales, sesiones de terapia ambulatoria, acceso a grupos dentro de la clínica, y línea de crisis 24/7.",
+                benefits: "✓ Seguimiento intensivo 90 días\n✓ Llamadas semanales de check-in\n✓ Terapia ambulatoria incluida\n✓ Acceso a grupos en clínica\n✓ Línea de crisis 24/7\n✓ Apoyo cuando más lo necesitas",
+                testimonial: "En el día 45 post-alta tuve ganas intensas de consumir. Llamé a la línea de crisis y me ayudaron a superarlo. Ese apoyo me salvó de recaer. - Gustavo, 34 años",
+                cta: "Seguimiento Post-Alta Incluido - Llama"
+            },
+            {
+                week: 41,
+                quarter: 4,
+                title: "Reconociendo Señales de Recaída",
+                heroTitle: "La Recaída Comienza en Tu Mente Antes Que en Tus Actos",
+                heroSubtitle: "Aprende las señales de alarma para detener una recaída antes de que ocurra.",
+                problem: "Muchos recaen y dicen 'fue de repente'. Pero la recaída es un proceso que comienza semanas antes del consumo: aislamiento, dejar de ir a juntas, irritabilidad, pensamientos de consumo.",
+                solution: "Te enseñamos las señales de alarma: cambios de humor, aislamiento, dejar rutinas de recuperación, fantasear con consumo, contacto con personas de riesgo. Reconócelas y actúa a tiempo.",
+                benefits: "✓ Identificación de señales tempranas\n✓ Plan de acción inmediata\n✓ Contactos de emergencia\n✓ Intervención preventiva\n✓ Refuerzo del programa\n✓ Evita la recaída completa",
+                testimonial: "Empecé a aislarme y dejar de ir a juntas. Mi padrino reconoció las señales y me confrontó. Gracias a eso no recaí. Las señales son reales. - Andrés, 37 años",
+                cta: "Aprende Las Señales - Protege Tu Sobriedad"
+            },
+            {
+                week: 42,
+                quarter: 4,
+                title: "Qué Hacer Si Recaes",
+                heroTitle: "Una Recaída No Es El Fin, Es Un Tropiezo",
+                heroSubtitle: "Si recaes, no todo está perdido. Levántate rápido y pide ayuda inmediatamente.",
+                problem: "Muchos recaen y por vergüenza siguen consumiendo. Piensan 'ya valió, ya perdí todo'. La vergüenza los mantiene callados y el consumo se prolonga.",
+                solution: "Si recaes: detén el consumo inmediatamente, pide ayuda sin vergüenza, regresa a juntas, contacta tu padrino, evalúa qué falló, y refuerza tu programa. Una recaída no borra tu progreso.",
+                benefits: "✓ Sin juicio ni vergüenza\n✓ Puerta abierta para regresar\n✓ Evaluación de qué falló\n✓ Refuerzo del tratamiento\n✓ Apoyo inmediato disponible\n✓ Aprendes de la experiencia",
+                testimonial: "Recaí a los 4 meses. Por vergüenza seguí consumiendo 2 semanas. Cuando finalmente pedí ayuda, me recibieron sin juzgarme. Hoy llevo 10 meses limpio desde esa recaída. - Víctor, 35 años",
+                cta: "Siempre Hay Una Segunda Oportunidad"
+            },
+            {
+                week: 43,
+                quarter: 4,
+                title: "Manteniendo La Motivación a Largo Plazo",
+                heroTitle: "¿Cómo Mantener La Motivación Después de Años?",
+                heroSubtitle: "La motivación inicial se desvanece. Necesitas razones profundas para mantener tu sobriedad.",
+                problem: "Los primeros meses estás motivado, pero con el tiempo la motivación baja. La vida se vuelve rutinaria. ¿Por qué sigo sobrio? Necesitas razones más profundas que el miedo.",
+                solution: "Trabajamos motivación intrínseca: tus valores, tus metas, el tipo de persona que quieres ser, el legado que quieres dejar. La motivación externa se acaba, la interna permanece.",
+                benefits: "✓ Clarificación de valores personales\n✓ Metas de vida a largo plazo\n✓ Visión de futuro clara\n✓ Propósito más allá de la sobriedad\n✓ Motivación intrínseca duradera\n✓ Razones profundas para estar limpio",
+                testimonial: "Ya no estoy sobrio por miedo, estoy sobrio porque amo la vida que he construido. Mi motivación ahora es proteger lo que he ganado, no solo evitar lo que perdí. - Rubén, 42 años",
+                cta: "Encuentra Tu Motivación Profunda - Llama"
+            },
+            {
+                week: 44,
+                quarter: 4,
+                title: "Celebrando Hitos de Sobriedad",
+                heroTitle: "Cada Día Limpio Es Una Victoria Que Merece Celebrarse",
+                heroSubtitle: "30 días, 90 días, 6 meses, 1 año... cada hito importa. Celébralo.",
+                problem: "Minimizas tus logros. 'Solo llevo 3 meses, no es gran cosa'. Esa falta de reconocimiento de tu progreso debilita tu motivación.",
+                solution: "Te enseñamos a celebrar cada hito: fichas de sobriedad, ceremonias en juntas, compartir tu logro, agradecimiento a tu red de apoyo. Reconoce lo que has logrado.",
+                benefits: "✓ Reconocimiento de logros\n✓ Fichas de sobriedad\n✓ Celebraciones en comunidad\n✓ Gratitud por el progreso\n✓ Motivación renovada\n✓ Orgullo sano de tu recuperación",
+                testimonial: "Recibir mi ficha de 1 año en mi grupo fue uno de los momentos más emotivos de mi vida. Sentí que realmente había logrado algo grande. Celebrar importa. - Alfredo, 38 años",
+                cta: "Tus Logros Merecen Celebrarse - Inicia"
+            },
+            {
+                week: 45,
+                quarter: 4,
+                title: "Relaciones Románticas en Recuperación",
+                heroTitle: "El Amor en Sobriedad: Procede Con Cuidado",
+                heroSubtitle: "Empezar una relación muy pronto en recuperación es riesgoso. Tómate tu tiempo.",
+                problem: "Muchos buscan llenar el vacío de las drogas con una relación. Saltan a romances intensos muy pronto. Cuando la relación falla, recaen. Las emociones de una relación nueva pueden ser trigger.",
+                solution: "Recomendamos esperar al menos 1 año antes de relaciones serias. Trabaja en ti primero. Cuando estés listo, aprende a tener relaciones sanas, con límites claros y comunicación honesta.",
+                benefits: "✓ Orientación sobre relaciones\n✓ Timing adecuado para romance\n✓ Relaciones sanas vs codependientes\n✓ Límites claros\n✓ Comunicación honesta\n✓ No depender de nadie para tu sobriedad",
+                testimonial: "Me enamoré a los 2 meses de salir. Cuando terminamos recaí. La segunda vez esperé 1 año para tener pareja. Esa relación fue completamente diferente, sana y real. - Hugo, 34 años",
+                cta: "Relaciones Sanas en Sobriedad - Aprende"
+            },
+            {
+                week: 46,
+                quarter: 4,
+                title: "Manejando El Estrés Sin Sustancias",
+                heroTitle: "El Estrés Era Tu Excusa Para Consumir",
+                heroSubtitle: "Aprende herramientas reales para manejar el estrés de la vida sin recurrir a drogas.",
+                problem: "La vida tiene estrés: problemas económicos, laborales, familiares. Antes consumías para 'aliviar' el estrés. Ahora necesitas herramientas reales que funcionen.",
+                solution: "Enseñamos técnicas probadas: ejercicio físico regular, meditación, respiración profunda, manejo de tiempo, delegación de tareas, y pedir ayuda cuando la necesitas.",
+                benefits: "✓ Técnicas de manejo de estrés\n✓ Ejercicio como medicina\n✓ Meditación y mindfulness\n✓ Respiración profunda\n✓ Organización de tiempo\n✓ Pedir ayuda es fortaleza",
+                testimonial: "Antes consumía cocaína cuando estaba estresado. Ahora corro, medito, y hablo con mi padrino. El estrés no desaparece pero ahora lo manejo sin destruirme. - Mario, 39 años",
+                cta: "Maneja El Estrés Sanamente - Llama"
+            },
+            {
+                week: 47,
+                quarter: 4,
+                title: "Gratitud: El Antídoto Contra La Recaída",
+                heroTitle: "La Gratitud Diaria Protege Tu Sobriedad",
+                heroSubtitle: "Un corazón agradecido es un corazón que no recae. Practica gratitud todos los días.",
+                problem: "El resentimiento, la amargura y sentirte víctima son camino a la recaída. 'La vida es injusta, merezco consumir'. Esa mentalidad te destruye.",
+                solution: "Practicamos gratitud diaria: lista escrita de bendiciones, compartir gratitud en juntas, enfoque en lo que tienes en lugar de lo que perdiste. La gratitud cambia tu perspectiva.",
+                benefits: "✓ Práctica diaria de gratitud\n✓ Lista de bendiciones\n✓ Enfoque en lo positivo\n✓ Cambio de perspectiva\n✓ Apreciación de lo que tienes\n✓ Corazón ligero",
+                testimonial: "Hacer mi lista de gratitud cada mañana cambió mi vida. Me enfoco en lo que tengo, no en lo que perdí. La gratitud me mantiene humilde y feliz. - Tomás, 41 años",
+                cta: "Cultiva Gratitud - Transforma Tu Vida"
+            },
+            {
+                week: 48,
+                quarter: 4,
+                title: "Salud Mental y Recuperación",
+                heroTitle: "Muchos Adictos Tienen Diagnósticos de Salud Mental",
+                heroSubtitle: "Depresión, ansiedad, TDAH, trauma... tratar la salud mental es parte de la recuperación.",
+                problem: "Muchos se automedicaban con drogas sin saberlo. Tenían depresión, ansiedad, TDAH no diagnosticado o tratado. Sin atender la salud mental, la recaída es casi segura.",
+                solution: "Ofrecemos evaluación psiquiátrica completa, diagnóstico profesional, medicación psiquiátrica cuando necesario, y terapia especializada para condiciones de salud mental.",
+                benefits: "✓ Evaluación psiquiátrica completa\n✓ Diagnóstico profesional\n✓ Medicación si es necesaria\n✓ Terapia especializada\n✓ Tratamiento integral\n✓ Doble diagnóstico atendido",
+                testimonial: "Tenía depresión severa sin diagnosticar. Consumía para no sentir. Cuando me medicaron correctamente, el craving disminuyó dramáticamente. Tratar mi salud mental fue clave. - Sergio, 36 años",
+                cta: "Trata Tu Salud Mental - Busca Ayuda"
+            },
+            {
+                week: 49,
+                quarter: 4,
+                title: "Vivir 'Un Día a La Vez'",
+                heroTitle: "No Pienses en Estar Sobrio Para Siempre",
+                heroSubtitle: "Solo enfócate en hoy. Mañana te preocuparás de mañana.",
+                problem: "Pensar 'nunca más voy a consumir en toda mi vida' es abrumador. Te paraliza. Ese pensamiento puede generar tanta ansiedad que te lleve a consumir.",
+                solution: "El lema más poderoso de recuperación: 'Un día a la vez'. No pienses en el futuro lejano. Solo pregúntate: ¿puedo estar limpio hoy? La respuesta casi siempre es sí.",
+                benefits: "✓ Vivir en el presente\n✓ Sin ansiedad por el futuro\n✓ Enfoque en hoy solamente\n✓ Manejable y realista\n✓ Reduce abrumamiento\n✓ Principio fundamental de recuperación",
+                testimonial: "Pensar en nunca volver a consumir me aterraba. Cuando aprendí a vivir un día a la vez, todo se volvió manejable. Solo necesito estar limpio hoy. - Rafael, 33 años",
+                cta: "Empieza Hoy - Solo Por Hoy"
+            },
+            {
+                week: 50,
+                quarter: 4,
+                title: "Ayuda Profesional Continua",
+                heroTitle: "La Terapia No Termina Con El Alta",
+                heroSubtitle: "Muchos necesitan terapia de mantenimiento. No es debilidad, es inteligencia.",
+                problem: "Algunos piensan que después del alta ya no necesitan ayuda. 'Ya estoy curado'. Pero la recuperación es de por vida y muchos se benefician de terapia continua.",
+                solution: "Ofrecemos terapia ambulatoria de mantenimiento: sesiones mensuales o según necesites, para mantenerte en el camino, trabajar nuevos desafíos, y prevenir recaídas.",
+                benefits: "✓ Terapia ambulatoria disponible\n✓ Sesiones según tu necesidad\n✓ Mantenimiento de largo plazo\n✓ Trabajo de nuevos desafíos\n✓ Prevención continua\n✓ Apoyo profesional de por vida",
+                testimonial: "Veo a mi terapeuta una vez al mes desde hace 2 años. Esas sesiones me mantienen honesto conmigo mismo y en el camino. Es mi inversión en mi sobriedad. - Alberto, 45 años",
+                cta: "Terapia de Mantenimiento - Consulta"
+            },
+            {
+                week: 51,
+                quarter: 4,
+                title: "Convirtiéndote en Mentor",
+                heroTitle: "Es Tu Turno de Ayudar a Otros",
+                heroSubtitle: "Con tiempo de sobriedad, es tu turno de ser padrino, mentor, ejemplo para otros.",
+                problem: "Has recibido mucho en tu recuperación. Sientes que debes retribuir. Quieres ayudar a otros que sufren como tú sufriste.",
+                solution: "Con tiempo sólido de sobriedad (generalmente 1+ año), puedes convertirte en padrino, mentor, o voluntario. Llevar el mensaje a otros fortalece tu propia recuperación.",
+                benefits: "✓ Ser padrino de alguien\n✓ Compartir tu experiencia\n✓ Llevar mensaje a otros\n✓ Voluntariado en comunidad\n✓ Fortalece tu recuperación\n✓ Propósito y significado",
+                testimonial: "Apadrinar a tres personas en recuperación ha sido lo más gratificante de mi vida sobria. Verlos crecer me recuerda mis propios inicios y me mantiene humilde. - Arturo, 48 años",
+                cta: "Conviértete en Mentor - Dale Vida"
+            },
+            {
+                week: 52,
+                quarter: 4,
+                title: "Un Año de Sobriedad: Reflexión y Gratitud",
+                heroTitle: "52 Semanas Después: Mira Cuánto Has Crecido",
+                heroSubtitle: "Un año completo de contenido, aprendizaje y esperanza. La recuperación es posible.",
+                problem: "Hace un año tal vez pensabas que era imposible. Que nunca te recuperarías. Que estabas perdido para siempre.",
+                solution: "Hoy, 52 semanas después, mira todo lo que has aprendido. La recuperación es real. Miles lo han logrado. Tú puedes ser el siguiente. Sentido de Vida está aquí para acompañarte en cada paso del camino.",
+                benefits: "✓ 52 semanas de esperanza\n✓ Conocimiento completo de adicciones\n✓ Herramientas de recuperación\n✓ Comunidad de apoyo\n✓ Vida nueva es posible\n✓ Estamos aquí para ti",
+                testimonial: "Hace un año llegué roto, sin esperanza. Hoy tengo vida, familia, propósito. Si yo pude, tú también puedes. La recuperación es el mejor regalo que me he dado. - Todo el equipo de Sentido de Vida",
+                cta: "Tu Nueva Vida Comienza Hoy - 33 3196 2135"
+            }
+        ];
+
+        let contentData = JSON.parse(localStorage.getItem('sentidoDeVida52') || '[]');
+        let currentWeek = null;
+        let filters = { quarter: '', status: '' };
+
+        // ==================== INIT ====================
+        function init() {
+            if (contentData.length === 0) {
+                contentData = WEEK_TEMPLATES.map(template => ({
+                    ...template,
+                    date: getMonday(template.week),
+                    status: 'pending',
+                    landingUrl: '',
+                    notes: ''
+                }));
+                saveData();
+            }
+            renderWeeks();
+            updateStats();
+            setupEventListeners();
+        }
+
+        function getMonday(weekNumber) {
+            const year = 2025;
+            const jan1 = new Date(year, 0, 1);
+            const daysOffset = (weekNumber - 1) * 7;
+            const targetDate = new Date(jan1.getTime() + daysOffset * 24 * 60 * 60 * 1000);
+            const dayOfWeek = targetDate.getDay();
+            const monday = new Date(targetDate);
+            monday.setDate(targetDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1));
+            return monday.toISOString().split('T')[0];
+        }
+
+        function saveData() {
+            localStorage.setItem('sentidoDeVida52', JSON.stringify(contentData));
+        }
+
+        // ==================== RENDER ====================
+        function renderWeeks() {
+            const container = document.getElementById('weeksContainer');
+            const filtered = contentData.filter(week => {
+                if (filters.quarter && week.quarter !== parseInt(filters.quarter)) return false;
+                if (filters.status && week.status !== filters.status) return false;
+                return true;
+            });
+
+            container.innerHTML = filtered.map(week => `
+                <div class="week-card ${week.status === 'published' ? 'completed' : ''}" onclick="openModal(${week.week})">
+                    <div class="week-header">
+                        <span class="week-number">Semana ${week.week}</span>
+                        <span class="status-badge status-${week.status}">${getStatusLabel(week.status)}</span>
+                    </div>
+                    <div class="week-title">${week.title}</div>
+                    <div class="week-meta">📅 ${formatDate(week.date)} • Q${week.quarter}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            const stats = {
+                total: 52,
+                pending: contentData.filter(w => w.status === 'pending').length,
+                ready: contentData.filter(w => w.status === 'ready').length,
+                published: contentData.filter(w => w.status === 'published').length
+            };
+            stats.progress = Math.round(((stats.ready + stats.published) / stats.total) * 100);
+
+            document.getElementById('statTotal').textContent = stats.total;
+            document.getElementById('statPending').textContent = stats.pending;
+            document.getElementById('statReady').textContent = stats.ready;
+            document.getElementById('statPublished').textContent = stats.published;
+            document.getElementById('statProgress').textContent = stats.progress + '%';
+        }
+
+        // ==================== MODAL ====================
+        function openModal(weekNum) {
+            currentWeek = contentData.find(w => w.week === weekNum);
+            if (!currentWeek) return;
+
+            document.getElementById('modalWeekNumber').textContent = `Semana ${currentWeek.week}`;
+            document.getElementById('modalWeekTitle').textContent = currentWeek.title;
+            document.getElementById('weekNumber').value = currentWeek.week;
+            document.getElementById('weekDate').value = currentWeek.date;
+            document.getElementById('weekStatus').value = currentWeek.status;
+            document.getElementById('weekTitle').value = currentWeek.title;
+            document.getElementById('heroTitle').value = currentWeek.heroTitle;
+            document.getElementById('heroSubtitle').value = currentWeek.heroSubtitle;
+            document.getElementById('problemText').value = currentWeek.problem;
+            document.getElementById('solutionText').value = currentWeek.solution;
+            document.getElementById('benefitsText').value = currentWeek.benefits;
+            document.getElementById('testimonial').value = currentWeek.testimonial;
+            document.getElementById('ctaText').value = currentWeek.cta;
+            document.getElementById('landingUrl').value = currentWeek.landingUrl || '';
+            document.getElementById('notes').value = currentWeek.notes || '';
+
+            updatePreview();
+            document.getElementById('weekModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('weekModal').classList.remove('active');
+            currentWeek = null;
+        }
+
+        function saveWeek() {
+            if (!currentWeek) return;
+
+            const index = contentData.findIndex(w => w.week === currentWeek.week);
+            contentData[index] = {
+                ...currentWeek,
+                date: document.getElementById('weekDate').value,
+                status: document.getElementById('weekStatus').value,
+                title: document.getElementById('weekTitle').value,
+                heroTitle: document.getElementById('heroTitle').value,
+                heroSubtitle: document.getElementById('heroSubtitle').value,
+                problem: document.getElementById('problemText').value,
+                solution: document.getElementById('solutionText').value,
+                benefits: document.getElementById('benefitsText').value,
+                testimonial: document.getElementById('testimonial').value,
+                cta: document.getElementById('ctaText').value,
+                landingUrl: document.getElementById('landingUrl').value,
+                notes: document.getElementById('notes').value
+            };
+
+            saveData();
+            closeModal();
+            renderWeeks();
+            updateStats();
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('previewContent');
+            const heroTitle = document.getElementById('heroTitle').value || currentWeek.heroTitle;
+            const heroSubtitle = document.getElementById('heroSubtitle').value || currentWeek.heroSubtitle;
+            const problem = document.getElementById('problemText').value || currentWeek.problem;
+            const solution = document.getElementById('solutionText').value || currentWeek.solution;
+            const benefits = document.getElementById('benefitsText').value || currentWeek.benefits;
+            const testimonial = document.getElementById('testimonial').value || currentWeek.testimonial;
+            const cta = document.getElementById('ctaText').value || currentWeek.cta;
+
+            preview.innerHTML = `
+                <div class="preview-section">
+                    <h3>🎯 Hero</h3>
+                    <h2 style="font-size: 2rem; color: var(--primary); margin-bottom: 0.5rem;">${heroTitle}</h2>
+                    <p style="font-size: 1.125rem; color: var(--text-secondary);">${heroSubtitle}</p>
+                </div>
+                <div class="preview-section">
+                    <h3>⚠️ Problema</h3>
+                    <p>${problem}</p>
+                </div>
+                <div class="preview-section">
+                    <h3>✅ Solución</h3>
+                    <p>${solution}</p>
+                </div>
+                <div class="preview-section">
+                    <h3>🎁 Beneficios</h3>
+                    <p style="white-space: pre-line;">${benefits}</p>
+                </div>
+                <div class="preview-section">
+                    <h3>💬 Testimonio</h3>
+                    <p style="font-style: italic; border-left: 4px solid var(--primary); padding-left: 1rem;">${testimonial}</p>
+                </div>
+                <div class="preview-section">
+                    <h3>📞 Llamada a la Acción</h3>
+                    <button class="btn btn-success" style="font-size: 1.25rem; padding: 1rem 2rem;">${cta}</button>
+                </div>
+            `;
+        }
+
+        function generateHTML() {
+            if (!currentWeek) return;
+
+            const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${currentWeek.title} - Sentido de Vida</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #333; }
+        .hero { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 4rem 2rem; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.25rem; opacity: 0.95; max-width: 800px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .section { margin: 3rem 0; }
+        .section h2 { color: #16a34a; font-size: 2rem; margin-bottom: 1rem; }
+        .section p { font-size: 1.125rem; margin-bottom: 1rem; }
+        .benefits { background: #f0fdf4; padding: 2rem; border-radius: 12px; white-space: pre-line; }
+        .testimonial { background: #e0f2fe; padding: 2rem; border-radius: 12px; border-left: 5px solid #16a34a; font-style: italic; margin: 2rem 0; }
+        .cta-section { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 3rem 2rem; text-align: center; margin-top: 3rem; border-radius: 12px; }
+        .cta-button { background: white; color: #16a34a; padding: 1rem 3rem; font-size: 1.25rem; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .contact-info { background: #052e16; color: white; padding: 2rem; text-align: center; }
+        .contact-info a { color: #22c55e; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>${document.getElementById('heroTitle').value}</h1>
+        <p>${document.getElementById('heroSubtitle').value}</p>
+    </div>
+
+    <div class="container">
+        <div class="section">
+            <h2>⚠️ El Problema</h2>
+            <p>${document.getElementById('problemText').value}</p>
+        </div>
+
+        <div class="section">
+            <h2>✅ Nuestra Solución</h2>
+            <p>${document.getElementById('solutionText').value}</p>
+        </div>
+
+        <div class="section">
+            <h2>🎁 Beneficios de Nuestro Programa</h2>
+            <div class="benefits">${document.getElementById('benefitsText').value}</div>
+        </div>
+
+        <div class="testimonial">
+            <p>${document.getElementById('testimonial').value}</p>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="color: white; margin-bottom: 1.5rem;">${document.getElementById('ctaText').value}</h2>
+            <button class="cta-button" onclick="window.location.href='tel:3331962135'">Llama Ahora: 33 3196 2135</button>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        <h3>${CLINIC_DATA.name}</h3>
+        <p>${CLINIC_DATA.address}</p>
+        <p>📞 <a href="tel:${CLINIC_DATA.phone.replace(/\s/g, '')}">${CLINIC_DATA.phone}</a></p>
+        <p>📧 <a href="mailto:${CLINIC_DATA.email}">${CLINIC_DATA.email}</a></p>
+        <p>🌐 <a href="${CLINIC_DATA.facebook}" target="_blank">Facebook</a> | Instagram: ${CLINIC_DATA.instagram}</p>
+        <p><strong>${CLINIC_DATA.hours}</strong></p>
+    </div>
+</body>
+</html>`;
+
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `semana${currentWeek.week}_${currentWeek.title.replace(/\s/g, '_')}.html`;
+            a.click();
+        }
+
+        // ==================== HELPERS ====================
+        function getStatusLabel(status) {
+            const labels = { pending: 'Pendiente', ready: 'Lista', published: 'Publicada' };
+            return labels[status] || status;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(contentData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sentido_de_vida_52_semanas.json';
+            a.click();
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const imported = JSON.parse(event.target.result);
+                        if (Array.isArray(imported)) {
+                            contentData = imported;
+                            saveData();
+                            renderWeeks();
+                            updateStats();
+                            alert('Datos importados exitosamente');
+                        }
+                    } catch (err) {
+                        alert('Error al importar: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // ==================== EVENT LISTENERS ====================
+        function setupEventListeners() {
+            document.getElementById('filterQuarter').addEventListener('change', (e) => {
+                filters.quarter = e.target.value;
+                renderWeeks();
+            });
+
+            document.getElementById('filterStatus').addEventListener('change', (e) => {
+                filters.status = e.target.value;
+                renderWeeks();
+            });
+
+            document.getElementById('btnExport').addEventListener('click', exportData);
+            document.getElementById('btnImport').addEventListener('click', importData);
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('btnCancel').addEventListener('click', closeModal);
+            document.getElementById('btnSave').addEventListener('click', saveWeek);
+            document.getElementById('btnGenerateHTML').addEventListener('click', generateHTML);
+
+            document.getElementById('weekModal').addEventListener('click', (e) => {
+                if (e.target.id === 'weekModal') closeModal();
+            });
+
+            // Update preview on input
+            ['heroTitle', 'heroSubtitle', 'problemText', 'solutionText', 'benefitsText', 'testimonial', 'ctaText'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+            });
+        }
+
+        // ==================== INIT ====================
+        init();
+    </script>
+</body>
+</html>

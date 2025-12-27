@@ -1,0 +1,137 @@
+Apps con Gemini
+Se consultó lo siguiente: Tengo ya estructurados los test psicológicos con esta estructura: Donde cada Test, es un a carpeta que contiene los reactivos, (pdf, xls, txt, etc) pero no se como integrarlos, para poder llamarlos y jalarlos al expediente del paciente., asi como tambien, tengo la batería completa de plantillas de documentación de NOM respecto del expediente electrónico para que no sea solo llenado unos puntos en la misma aplicación. INCLUSO, pienso la idea de una nueva estructura con raíz y sub carpetas con las dependencias, para cada modulo, ya que en otra carpeta tengo los catálogos, y en otras dos lo referente a la CIE 11 (inf y API) Y DSM-5,
+3 archivos adjuntos
+- MODULO TESTS.txt
+- cie.js
+- index.html
+Detalles
+event
+16 de noviembre a la(s) 3:42 p.m.
+apps
+Apps con Gemini
+chat
+¡Excelente! Ya tienes la base de datos (tus archivos de tests) y la base normativa (tus plantillas NOM). El desafío ahora es la integración y organización.
+
+Tu idea de una nueva estructura con raíz y subcarpetas es la mejor práctica y es fundamental para escalar el proyecto y separar la lógica de los datos.
+
+Aquí tienes la estrategia recomendada para integrar tus archivos locales y reestructurar tu proyecto.
+
+1. Integración de Tests Psicológicos (PDF/XLS)
+El problema principal aquí es la seguridad del navegador. El JavaScript que se ejecuta en tu archivo HTML (sistema_psicologia_nom (2).html) no puede acceder directamente a las carpetas y archivos locales de tu disco duro (ej. C:/Tests/MMPI/reactivos.pdf) por motivos de seguridad.
+
+La solución es tratarlos como recursos de referencia o plantillas de descarga, y enfocar la aplicación en almacenar las respuestas y el puntaje del test.
+
+A. Estrategia de Archivos como Recursos
+Para que la aplicación pueda "jalar" estos archivos, deben estar ubicados en el mismo proyecto o en un servidor web (incluso local, como XAMPP o Node.js).
+
+Reestructuración sugerida:
+
+Nueva Carpeta	Contenido	Función en la App
+tests/	Toda la estructura que tienes (AUDIT/, MMPI/, Raven/, etc.)	Recursos de Referencia: El terapeuta hace clic en el enlace para abrir/descargar el PDF del reactivo o la hoja de calificación XLS.
+Integración en createDiagnosticoModule() (HTML/JS):
+
+Debes modificar el módulo de diagnóstico para listar estos recursos y crear un enlace.
+
+<div class="test-resource">
+    <h3>Test MMPI-2</h3>
+    <p>Documentación de Apoyo para la Aplicación y Calificación:</p>
+    <ul>
+        <li><a href="tests/MMPI/MMPI-2 (cuadernillo).pdf" target="_blank" class="link-resource"><i class="fas fa-file-pdf"></i> Cuadernillo de Reactivos (PDF)</a></li>
+        <li><a href="tests/MMPI/MMPI-2 (calificacion).xlsx" target="_blank" class="link-resource"><i class="fas fa-file-excel"></i> Hoja de Calificación (XLS)</a></li>
+    </ul>
+    
+    <label for="mmpi_puntuacion">Puntuación T (Perfil):</label>
+    <input type="text" id="mmpi_puntuacion" placeholder="Ej: 65 (Escala D)">
+    <label for="mmpi_interpretacion">Conclusión Diagnóstica del MMPI:</label>
+    <textarea id="mmpi_interpretacion"></textarea>
+</div>
+Conclusión: No "jalan" los archivos al expediente, jalan los enlaces a los archivos (para referencia) y lo que se guarda en el expediente es la interpretación clínica y el puntaje final.
+
+B. Integración de Datos del Test (Futuro)
+Si en el futuro deseas que los tests sean interactivos dentro de la aplicación (como los de tu catálogo TEST_CATALOG que propuse antes), la estructura de archivos debe ser diferente:
+
+data/tests/audit_questions.json: Archivo JSON con las preguntas y la lógica de puntuación.
+js/modules/test_audit.js: Archivo JS con la función renderAUDITForm() y la función de cálculo calculateAUDITScore().
+2. Reestructuración de Directorios
+La estructura de un solo archivo HTML es buena para un prototipo, pero para un sistema integral como el tuyo, la modularidad es clave.
+
+Directorio	Archivos Sugeridos	Propósito
+root/	index.html (El shell de la app)	Punto de entrada. Solo contiene la estructura básica (sidebar, main content) y enlaza los CSS/JS.
+css/	styles.css (Tu CSS actual), cie11.css	Estilos de la aplicación.
+js/	app.js (Tu JS principal: initApp, loadPatient, switchModule)	Lógica principal y manejo de estado.
+modules.js (Separar: createIdentificacionModule, createNotasModule, etc.)	Lógica de Módulos (Separación de Preocupaciones).
+tools.js (exportHL7, logAudit, exportPDF)	Funciones utilitarias.
+data/	patients.json (Datos de ejemplo), protocol_catalog.json	Catálogos de datos estáticos y datos de ejemplo.
+tests/	MMPI/, AUDIT/, etc. (PDFs, XLS, manuales)	Recursos de los tests (como se explicó en el punto 1).
+cie11/	cie.js (Tu archivo de configuración), index.html (o cie11_integration.html)	Integración de la herramienta de codificación incrustada (ECT) de la CIE-11.
+Cómo integrar los archivos JS (en index.html):
+
+Donde antes tenías todo el JS, ahora solo pones los enlaces a los archivos en orden de dependencia:
+
+<script src="js/app.js"></script>
+<script src="js/modules.js"></script>
+<script src="js/tools.js"></script>
+<script src="data/protocol_catalog.json"></script>
+<script src="https://icdcdn.who.int/embeddedct/icd11ect-1.7.1.js"></script>
+<script src="cie11/cie.js"></script>
+3. Plantillas de Documentación NOM-004
+Tu código ya tiene las herramientas para esto (librerías jsPDF y html2canvas). Para usar tus plantillas de documentación de la NOM, la mejor estrategia es crear una plantilla HTML oculta o un módulo JS de template literal para cada documento legal (Consentimiento Informado, Aviso de Privacidad, Hoja Frontal de Expediente).
+
+Estrategia: Función generateDocumentPDF()
+Crea la Plantilla: Define la estructura completa de tu plantilla NOM-004 (incluyendo encabezados legales, logos, espacios para firmas) usando una cadena de texto (Template Literal) en JavaScript.
+
+Rellena la Plantilla: Usa los datos del currentPatient para llenar los espacios de la plantilla (ej. ${currentPatient.nombre}, ${currentPatient.diagnostico.cie10}).
+
+Genera el PDF: Llama a la librería jsPDF para convertir esa plantilla HTML llena en un PDF con formato legal.
+
+Ejemplo de Función (tools.js):
+
+function generateNom004PDF(patient) {
+    // 1. Plantilla (esto debe ser mucho más extenso)
+    const plantillaHTML = `
+        <div id="nom-template-pdf">
+            <h2>Expediente Clínico Electrónico - NOM-004-SSA3-2012</h2>
+            <p><strong>Establecimiento:</strong> ${patient.establecimiento.nombre}</p>
+            <p><strong>Nombre del Paciente:</strong> ${patient.nombre} ${patient.apellidos}</p>
+            <p><strong>Diagnóstico Principal (CIE-11/DSM-5):</strong> ${patient.diagnostico.diagnostico_principal}</p>
+            
+            <div class="firma-section">
+                <p>___________________________________</p>
+                <p>Firma y Cédula del Profesional</p>
+            </div>
+        </div>
+    `;
+
+    // 2. Generación del PDF (usando tus librerías ya incluidas)
+    // El proceso requiere agregar este HTML temporalmente al DOM para que html2canvas pueda capturarlo.
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = plantillaHTML;
+    document.body.appendChild(tempElement);
+    
+    // El resto del código de jsPDF/html2canvas que ya tienes en tu prototipo
+    html2canvas(tempElement, {
+        scale: 2,
+        useCORS: true 
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jspdf.jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: 'a4'
+        });
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`Expediente_${patient.id}.pdf`);
+
+        // Limpiar elemento temporal
+        tempElement.remove();
+    });
+}
+¿Por qué se guardó esta actividad?
+Se guardó esta actividad en tu Cuenta de Google porque la opción Actividad en las Apps con Gemini estaba activada mientras usabas Apps con Gemini.
+
+info_filled
+Si usas un dispositivo compartido o accedes con varias cuentas, es posible que aquí aparezca actividad de otra cuenta. Más información

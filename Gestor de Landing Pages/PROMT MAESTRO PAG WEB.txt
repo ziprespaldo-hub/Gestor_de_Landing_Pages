@@ -1,0 +1,220 @@
+PROMPT MAESTRO ULTRA-OPTIMIZADO — VERSIÓN SUPREMA
+<<ROLE: Arquitecto Full-Stack Senior + Ingeniero en Sistemas Avanzados>>
+<<SPECIALTY: Aplicaciones web autocontenidas y dashboards empresariales sin dependencias>>
+<<CONTEXT: Restauración vehicular profesional – Nissan Tsuru GS II 2000>>
+
+Genera UN ÚNICO ARCHIVO HTML COMPLETO, AUTOCONTENIDO y PROFESIONAL, que incluya:
+- HTML estructurado
+- CSS modular inline
+- JavaScript avanzado
+- JSON embebido
+- SVG embebido para íconos y gráficas
+- Logos e imágenes en Base64
+- Código ENTREGADO al 100% en un solo documento, listo para copiar/pegar
+- Sin dependencias externas, sin frameworks, sin CDNs, sin imports
+
+El archivo debe implementar un SISTEMA EMPRESARIAL REAL dentro de un solo archivo, con arquitectura modular clara, persistencia, dashboards y exportaciones profesionales (PDF + Excel).
+
+=====================================================
+<<OBJECTIVE: Construir una SUPER-APLICACIÓN TIPO DASHBOARD>>
+=====================================================
+
+La aplicación debe gestionar:
+- Inventario por secciones del vehículo
+- Componentes completos con estados, costos, fotos, prioridad, observaciones y fechas
+- 3 cotizaciones paralelas (A, B, C)
+- Resumen global inteligente
+- Exportación/importación JSON
+- Exportación a PDF avanzado (con logo, márgenes, texto justificado)
+- Exportación a Excel XLS (con logo, columnas formateadas)
+- Dashboard con gráficas empresariales en SVG
+- Control de gastos por fecha
+- Backups automáticos
+- Tema claro/oscuro
+- Soporte para múltiples vehículos
+- Agenda de contactos y directorio global
+- Autosave cada 5s
+- Log de cambios
+- Buscador global
+- Filtros avanzados
+- Timelines
+- Checklists complejos
+- Módulo de proveedores global
+- Módulo de ingestión automática desde la web
+- Identificador de contactos por número telefónico
+- Modo desarrollador avanzado (DevMode)
+
+=====================================================
+<<ARCHITECTURE: BLUEPRINT CONTRACT>>
+=====================================================
+
+### APP CORE
+- Modelo interno basado en objetos: Vehículo → Secciones → Componentes
+- Render Engine propio (micro virtual DOM)
+- EventBus interno para comunicación modular
+- LocalStorage para sincronización rápida
+- IndexedDB como base de datos principal
+- Backup automático con rotación
+- Modo claro/oscuro persistente
+
+### MODULE: Inventory
+- Secciones predefinidas + sección “Otros” editable
+- CRUD completo
+- Campos:
+  - nombre
+  - descripción
+  - estado (faltante, dañado, reemplazo, comprado, instalado)
+  - costo estimado
+  - costo final
+  - fotos en base64
+  - prioridad (alta, media, baja)
+  - fecha actualización
+  - observaciones
+- Funciones:
+  - duplicar componente
+  - marcar como terminado
+  - filtros por estado/prioridad
+  - buscador global
+  - timeline por componente
+
+### MODULE: Quotations (A, B, C)
+- Datos del proveedor
+- Lista de piezas/servicios
+- Totales automáticos
+- Comparación entre cotizaciones
+- Exportación individual o conjunta
+
+### MODULE: Summary Bar
+- Totales por sección
+- Totales por cotizaciones
+- Avance global
+- Alertas inteligentes:
+  - sin costo
+  - prioridad alta
+  - diferencias extremas entre cotizaciones
+
+### MODULE: Dashboard SVG (sin librerías)
+- Avance por sección
+- Distribución por estado
+- Gastos por mes
+- Comparativa de cotizaciones
+- Gastos por proveedor
+- Tendencias
+
+### MODULE: PDF Export
+- Todo generado desde JS nativo
+- Diseño profesional
+- Márgenes 20–25mm
+- Texto justificado
+- Encabezados y pie de página
+- Índice automático
+- Secciones incluidas:
+  - Inventario
+  - Cotizaciones
+  - Gráficas
+  - Avance
+  - Gastos
+  - Agenda
+  - Proveedores
+  - Directorio global
+
+### MODULE: Excel XLS Export
+- Generación manual sin librerías
+- Hojas múltiples:
+  - Inventario
+  - Cotizaciones
+  - Gastos
+  - Proveedores
+  - Contactos
+- Logo base64 incrustado
+- Formato contable
+- Autoajuste de columnas
+
+### MODULE: Web Data Ingestion (cuando el modelo lo permita)
+- Búsqueda de proveedores en la web
+- Importación de refacciones desde catálogos
+- Generación automática de contactos
+- Identificación inversa de números telefónicos
+- Botones:
+  - Buscar en la Web
+  - Importar proveedor
+  - Importar pieza
+  - Añadir al inventario
+  - Añadir a cotización
+
+### MODULE: Global Providers
+- Catálogo de proveedores
+- CRUD completo
+- Campos:
+  - Nombre
+  - Teléfono
+  - Dirección
+  - Servicios
+  - Notas
+- Enlace con cotizaciones e inventario
+
+### MODULE: Contacts / Directory
+- Agenda de contactos completa
+- Importación desde web por número
+- Clasificación automática
+- Integración con proveedores y cotizaciones
+
+### MODULE: DevMode (Ctrl+Alt+D)
+- Inspector de IndexedDB
+- Editor RAW del estado
+- Monitor del autosave
+- Auditoría completa
+- Registro de eventos
+
+=====================================================
+<<UI/UX SPEC>>
+=====================================================
+- Layout dual-column
+- Panel inferior de resumen
+- Tarjetas y acordeones
+- Diseño moderno, sobrio, empresarial
+- Responsive total
+- Animaciones suaves
+- Toast notifications
+- Confirmaciones visuales
+- Colores de estado
+- Modo oscuro/claro persistente
+
+=====================================================
+<<CODING RULES>>
+=====================================================
+- Código *TOTALMENTE* comentado
+- Secciones marcadas:
+  - // UI Rendering
+  - // Inventory Logic
+  - // Quotations Engine
+  - // Dashboard Renderer
+  - // IndexedDB Layer
+  - // PDF Exporter
+  - // XLS Exporter
+  - // Web Ingestion Engine
+  - // EventBus
+  - // Autosave System
+  - // DevMode Panel
+- Semántica clara, funciones puras
+- Manejo de errores robusto
+- Validación estricta
+- Arquitectura escalable
+
+=====================================================
+<<FINAL DELIVERY>>
+=====================================================
+ENTREGAR:
+
+✔ UN ÚNICO ARCHIVO HTML COMPLETO  
+✔ 100% AUTOCONTENIDO  
+✔ 100% FUNCIONAL  
+✔ Listo para copiar/pegar  
+✔ Sin dependencias externas  
+✔ Con TODAS las funciones descritas (ninguna puede omitirse)  
+✔ Código limpio, modular, comentado y profesional  
+
+=====================================================
+<<FINAL ORDER>>
+=====================================================
+GENERAR AHORA el archivo HTML completo cumpliendo este contrato al 100%.

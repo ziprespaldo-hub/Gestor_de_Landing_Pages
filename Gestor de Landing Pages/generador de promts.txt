@@ -1,0 +1,104 @@
+1. Redacción de artículo o texto estructurado
+Eres un redactor profesional.  
+Tema: [tema específico]  
+Audiencia: [grupo al que va dirigido — ej. jóvenes, profesionales, estudiantes, público general]  
+Objetivo: [informar / convencer / educar / entretener]  
+Estructura requerida:  
+  1. Introducción  
+  2. Desarrollo con al menos [número] secciones/subtítulos  
+  3. Conclusión o llamado a la acción  
+Tono: [formal / informal / amigable / técnico / motivacional / etc.]  
+Extensión: aproximadamente [número de palabras o párrafos]  
+
+2. Resumen de texto largo
+Eres un asistente que resume textos.  
+Recibe este texto: [inserta aquí el texto largo]  
+Tu tarea: resumirlo manteniendo las ideas principales, sin perder contexto ni matices importantes.  
+Formato: [lista de viñetas / párrafos cortos / tabla con puntos claves]  
+Opcional: si hay datos, fechas o cifras importantes, inclúyelos.  
+
+3. Escritura de correo electrónico / mensaje formal
+Eres un escritor profesional.  
+Objetivo del mensaje: [por ejemplo: pedir información, cotización, hacer una propuesta, disculpa, agradecimiento].  
+Destinatario: [quién lo recibirá — ejemplo: cliente, proveedor, amigo, colega].  
+Tono: [formal / cordial / amistoso / profesional].  
+Longitud: [máximo 150–200 palabras / conciso / detallado].  
+Incluir: saludo inicial, cuerpo del mensaje, despedida, firma.  
+
+4. Brainstorm / generación de ideas creativas
+Eres un generador de ideas creativo.  
+Quiero obtener [número] ideas para: [tema o proyecto].  
+Contexto / restricciones: [por ejemplo: presupuesto bajo, público joven, idioma, medio — blog, redes sociales, físico, digital, etc.].  
+Para cada idea, entrega:  
+  - Título breve  
+  - Descripción clara  
+  - Motivo por el que podría funcionar  
+  - Si aplica: pasos básicos para llevarla a cabo  
+Tono: creativo, inspirador, práctico.  
+
+5. Comparación / análisis de opciones
+Eres un analista experto.  
+Objetivo: comparar/analizar 2 o más opciones.  
+Opciones: [describir las opciones a analizar]  
+Criterios de evaluación: [por ejemplo: costo, facilidad, tiempo, ventajas, desventajas, impacto, mantenimiento, escalabilidad]  
+Formato: tabla comparativa + conclusión/recomendación indicando cuál opción conviene más según contexto.  
+Tono: claro, directo, objetivo.  
+
+6. Explicación sencilla de un tema técnico o complejo
+Eres un profesor / divulgador.  
+Tema: [tema técnico o complejo]  
+Audiencia: [por ejemplo: persona sin conocimientos previos, estudiantes, público general]  
+Objetivo: explicar de forma clara, con analogías si es útil, sin jerga innecesaria.  
+Formato: párrafo o lista, con ejemplos fáciles de entender.  
+Tono: sencillo, didáctico, amigable.  
+
+7. Planificación / checklist de proyecto o tarea
+Eres un planificador experto.  
+Proyecto / tarea: [describir qué quieres planear]  
+Objetivo: definir los pasos necesarios, tiempos estimados, recursos requeridos.  
+Entrega: checklist detallada o plan por fases, con subtareas, responsables (puede ser “yo”), y prioridades.  
+Tono: organizado, claro, realista.  
+
+8. Creación de contenido para redes sociales / marketing / posts
+Eres un creador de contenido / marketero.  
+Objetivo: generar [número] ideas de contenido para redes sociales sobre [tema específico].  
+Público objetivo: [describir audiencia: edad, intereses, tipo de público]  
+Formato: [ej: títulos + texto de post + hashtags + llamado a la acción]  
+Tono: [casual / juvenil / profesional / informativo / emocional, según convenga]  
+
+9. Traducción o reformulación de texto manteniendo estilo
+Eres traductor / editor.  
+Tarea: traducir / reformular este texto: [inserta texto original]  
+Objetivo: mantener significado, pero adaptar al estilo: [español neutro / español de México / español formal / español coloquial]  
+Si es traducción: conserva contexto y tono.  
+Si es reformulación: mejora redacción, corrige errores, ajusta estilo, pero sin cambiar idea.  
+
+10. Investigación rápida / resumen de información sobre un tema
+Eres un investigador / analista.  
+Tema: [tema a investigar]  
+Objetivo: obtener información clave, contextos, ventajas/desventajas, datos relevantes, conclusiones.  
+Requisitos: basada en fuentes confiables, con referencias a datos o hechos cuando aplique.  
+Formato: resumen con subtítulos (por ejemplo: contexto, ventajas, desventajas, conclusiones).  
+Tono: claro, objetivo, entendible.  
+
+💡 Algunas buenas prácticas al usar estas plantillas
+
+Define siempre contexto + objetivo + audiencia: eso ayuda a que la IA entienda qué esperas. 
+Prompt Engineering
++2
+hostinger.com
++2
+
+Indica claramente el formato de salida (lista, párrafos, tabla, etc.). 
+Prompt
++1
+
+Si puedes, agrega detalles específicos (tono, longitud, estilo, restricciones). 
+shopify.com
++1
+
+Si la tarea es compleja, considera dividirla en pasos o pedir que primero consulte si algo no está claro. Esto evita resultados confusos o incompletos. 
+El Diario IA
++1
+
+ No te cortes en refinar el prompt: muchas veces basta con pequeños ajustes de contexto o detalles para mejorar muchísimo los resultados.
